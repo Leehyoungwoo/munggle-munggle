@@ -80,6 +80,7 @@ export default function ProfileDog (props) {
 const styles = StyleSheet.create({
   profileDogContainer: {
     width: SCREEN_WIDTH,
+    backgroundColor: "rgb(255, 255, 245)"
   },
   indicatorView: {
     width: SCREEN_WIDTH,
@@ -97,8 +98,10 @@ const styles = StyleSheet.create({
     padding: 20,
     alignItems: "center",
     marginVertical: 20,
-    borderRadius: 20,
     backgroundColor: "white",
+    borderWidth: 1,
+    borderColor: "gainsboro",
+    elevation: 5,
   },
   profileDogImageView: {
     width: SCREEN_WIDTH * 0.7,
@@ -118,7 +121,7 @@ const styles = StyleSheet.create({
   },
   profileDogName: {
     fontSize: 19,
-    fontWeight: "500",
+    fontWeight: "bold",
   },  
   profileDogViewBottomView: {
     marginTop: 5,
@@ -151,7 +154,7 @@ const styles = StyleSheet.create({
   profileDogDescriptionView: {
     marginTop: SCREEN_HEIGHT * 0.01,
     paddingTop: SCREEN_HEIGHT * 0.01,
-    borderTopColor: "gray",
+    borderTopColor: "gainsboro",
     borderTopWidth: 1,
     width: SCREEN_WIDTH * 0.7,
     height: SCREEN_HEIGHT * 0.08,
@@ -159,6 +162,7 @@ const styles = StyleSheet.create({
     alignItems1: "flex-start",
   },
   profileDogDescriptionText: {
-    fontSize: 14,
+    fontSize: 17,
+    textAlign: "center",
   },
 });

@@ -76,10 +76,13 @@ const styles = StyleSheet.create({
     backgroundColor: "rgb(253, 245, 169)",
     justifyContent: "center",
     alignItems: "center",
-    borderRadius: 8,
+    borderTopLeftRadius: 5,
+    borderBottomLeftRadius: 5,
+    borderWidth: 1,
+    borderColor: "gainsboro",
   },
   followButtonText: {
     fontSize: 15,
-    fontWeight: "500",
+    fontWeight: "600",
   },
 });

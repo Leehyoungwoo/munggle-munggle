@@ -477,6 +477,7 @@ const styles = StyleSheet.create({
     height: SCREEN_HEIGHT,
     justifyContent: "center",
     alignItems: "center",
+    backgroundColor: "rgba(0,0,0,0.2)",
   },
   searchModalContainer: {
     alignItems: "center",
@@ -484,10 +485,11 @@ const styles = StyleSheet.create({
     height: SCREEN_HEIGHT * 0.88,
     marginBottom: SCREEN_HEIGHT * 0.1,
     position: "relative",
-    borderRadius: 30,
     borderWidth: 1,
-    borderColor: "lightgrey",
-    backgroundColor: "rgb(255, 255, 240)",
+    borderColor: "gainsboro",
+    backgroundColor: "white",
+    elevation: 5,
+    borderRadius: 10,
   },
   closeView: {
     width: SCREEN_WIDTH * 0.06,
@@ -539,6 +541,7 @@ const styles = StyleSheet.create({
     width: SCREEN_WIDTH * 0.9,
     height: SCREEN_HEIGHT * 0.062,
     flexDirection: "row",
+    borderColor: "gainsboro",
   },
 
 // tab view
@@ -575,14 +578,17 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "flex-start",
     justifyContent: "space-between",
-    backgroundColor: "rgb(249, 250, 208)",
-    borderRadius: 20,
+    backgroundColor: "white",
     paddingVertical: SCREEN_HEIGHT * 0.01,
+    borderWidth: 1,
+    elevation: 5,
+    borderColor: "gainsboro",
+    paddingRight: 5,
   },
   searchPostListViewLeftView: {
     width: SCREEN_WIDTH * 0.24,
     height: SCREEN_HEIGHT * 0.2,
-    backgroundColor: "rgb(249, 250, 208)",
+    backgroundColor: "white",
     borderRadius: 7,
     alignItems: "center",
     justifyContent: "space-around",
@@ -590,26 +596,23 @@ const styles = StyleSheet.create({
   searchPostListProfileButtonView: {
     flexDirection: "row",
     width: SCREEN_WIDTH * 0.235,
-    justifyContent: "space-between",
+    // justifyContent: "space-between",
+    marginLeft: 3,
   },
   searchPostListViewRightView: {
     width: SCREEN_WIDTH * 0.6,
     height: SCREEN_HEIGHT * 0.3,
     alignItems: "center",
-    backgroundColor: "rgb(249, 250, 208)",
-    borderRadius: 9,
+    backgroundColor: "white",
     justifyContent: "space-around",
   },
   searchPostListImageView: {
     width: SCREEN_WIDTH * 0.60,
     height: SCREEN_HEIGHT * 0.23,
-    backgroundColor: "rgb(249, 250, 208)",
-    borderRadius: 20,
   },
   searchPostListImage: {
     width: SCREEN_WIDTH * 0.60,
     height: SCREEN_HEIGHT * 0.22,
-    borderRadius: 20,
   },
   searchPostListBottomView: {
     width: SCREEN_WIDTH * 0.60,
@@ -654,7 +657,6 @@ const styles = StyleSheet.create({
 
 //프로필 컨테이너 관련
   userContentView: {
-    borderRadius: 10,
     backgroundColor: '#e0e0e0',
     width: SCREEN_WIDTH * 0.85,
     height: SCREEN_HEIGHT * 0.1,
@@ -711,7 +713,6 @@ const styles = StyleSheet.create({
     width: SCREEN_WIDTH * 0.41,
     height: SCREEN_HEIGHT * 0.06,
     justifyContent: "flex-start",
-    borderRadius: 10,
     backgroundColor: '#e0e0e0',
     marginVertical: 8,
     flexDirection: 'row',
@@ -737,7 +738,6 @@ const styles = StyleSheet.create({
 
   //이용자 컨테이너 관련
   userContainer: {
-    borderRadius: 10,
     width: SCREEN_WIDTH*0.9,
     margin: 10,
     padding: 10,
@@ -748,7 +748,6 @@ const styles = StyleSheet.create({
   profileImage: {
     width: 50,
     height: 50,
-    borderRadius: 25,
   },
   userInfo: {
     marginLeft: SCREEN_WIDTH*0.1,

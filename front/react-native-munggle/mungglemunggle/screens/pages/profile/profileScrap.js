@@ -82,6 +82,9 @@ return (
 
 const styles = StyleSheet.create({
   postScrapContainer: {
+    width: SCREEN_WIDTH,
+    height: SCREEN_HEIGHT,
+    backgroundColor: "rgb(255, 255, 245)",
   },
   postScrapListContainer: {
   },

@@ -9,10 +9,10 @@ export default function ProfileCircle (props) {
           style={styles.profileCircleImage}
           src={props.imageProfile}
         />
+        <View style={styles.profileCircleNameView}>
+          <Text style={styles.profileCircleName}>{ props.nameProfile }</Text>
+        </View>
       </TouchableOpacity>
-      <View style={styles.profileCircleNameView}>
-        <Text style={styles.profileCircleName}>{ props.nameProfile }</Text>
-      </View>
     </View>
   );
 }
@@ -38,6 +38,7 @@ const styles = StyleSheet.create ({
     width: 90,
     justifyContent: "center",
     alignItems: "center",
+    marginTop: 5,
   },
   profileCircleName: {
     fontSize: 15,

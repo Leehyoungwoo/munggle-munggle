@@ -88,9 +88,9 @@ export default function SignUp (props) {
     console.log(nickname);
     axios.get(
       `${apiUrl}/users/nickname?nickname=${nickname}`,
-      {headers: {
-        "Content-Type": "application/x-www-form-urlencoded",
-      }}
+      // {headers: {
+      //   "Content-Type": "application/x-www-form-urlencoded",
+      // }}
     ).then((res) => {
       setIsConfirmNickname(true);
       console.log(res.status);

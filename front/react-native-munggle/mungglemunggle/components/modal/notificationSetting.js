@@ -20,10 +20,10 @@ export default function NotificationSetting (props) {
   };
 
   return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0,0,0,0.5)' }}>
-      <StatusBar backgroundColor="rgba(0,0,0,0.5)" />
-      <View style={{ backgroundColor: 'white', padding: 16, borderRadius: 8, width: 300 }}>
-        <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0,0,0,0.2)' }}>
+      <StatusBar backgroundColor="rgba(0,0,0,0.2)" />
+      <View style={{ backgroundColor: 'white', padding: 16, width: 300, elevation: 5, borderRadius: 10, }}>
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', borderBottomWidth: 1, paddingBottom: 10, borderColor: "gainsboro", }}>
           <View style={{ width: 24, height: 24 }} />
           <View>
             <Text style={{ fontSize: 18, fontWeight: 'bold' }}>알림 설정</Text>

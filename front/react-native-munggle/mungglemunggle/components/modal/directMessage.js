@@ -7,6 +7,7 @@ import iconClose from "../../assets/icons/close1.png";
 import axios, { Axios } from "axios";
 import DirectMessageRoom from "./directMessageRoom";
 import WS from "react-native-websocket";
+import { AntDesign } from '@expo/vector-icons';
 
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get("window")
@@ -152,9 +153,10 @@ export default function DirectMessage (props) {
               renderItem={renderChatRoom}
             />
             <TouchableOpacity onPress={() => setCreateModalVisible(true)}>
-                <Image source={require("../../assets/icons/plus.png")} style={{ position:"absolute", width: 70, height: 70,
-              right: 20, bottom: 20 }} />
-              </TouchableOpacity>
+                {/* <Image source={require("../../assets/icons/plus.png")} style={{ position:"absolute", width: 70, height: 70,
+              right: 20, bottom: 20 }} /> */}
+                <AntDesign name="pluscircleo" size={60} color="rgb(13, 110, 253)" style={{ position: "absolute", bottom: 0, right: 20 }} />
+            </TouchableOpacity>
           </View>
 
           
@@ -165,11 +167,14 @@ export default function DirectMessage (props) {
         onRequestClose={() => setCreateModalVisible(!createModalVisible)}
       >
         <StatusBar backgroundColor="rgba(0,0,0,0.5)" />
-        <View style={{ flex: 1, justifyContent: "center", alignItems: "center", backgroundColor: "rgba(0,0,0,0.5)" }}>
-          <View style={{ borderRadius: 30,
-    borderWidth: 1,
-    borderColor: "lightgrey",
-    backgroundColor: "rgb(255, 255, 240)", padding: 16, width: 300 }}>
+        <View style={{ flex: 1, justifyContent: "center", alignItems: "center", backgroundColor: "rgba(0,0,0,0.2)" }}>
+          <View style={{ 
+            borderRadius: 10,
+            borderWidth: 1,
+            borderColor: "lightgrey",
+            backgroundColor: "white", padding: 16, width: 300,
+            elevation: 5,
+          }}>
             <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", }}>
             <View style={{ width: 24, height: 24 }} />
               <Text style={{ fontSize: 18, fontWeight: "bold" }}>DM상대 초대</Text>
@@ -228,6 +233,7 @@ const styles = StyleSheet.create({
     height: SCREEN_HEIGHT,
     justifyContent: "center",
     alignItems: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.2)"
   },
   directMessageModalContainer: {
     alignItems: "center",
@@ -236,10 +242,11 @@ const styles = StyleSheet.create({
     marginBottom: SCREEN_HEIGHT * 0.015,
     padding: SCREEN_WIDTH * 0.0,
     position: "relative",
-    borderRadius: 30,
     borderWidth: 1,
     borderColor: "lightgrey",
-    backgroundColor: "rgb(255, 255, 240)",
+    backgroundColor: "white",
+    elevation: 5,
+    borderRadius: 10,
   },
   directMessageModalScrollView: {
   },
@@ -257,11 +264,13 @@ const styles = StyleSheet.create({
   },
 
   directMessageTopView: {
-    width: SCREEN_WIDTH * 0.9,
+    width: SCREEN_WIDTH * 0.82,
     height: SCREEN_HEIGHT * 0.06,
     justifyContent: "center",
     alignItems: "center",
-
+    borderBottomWidth: 1,
+    borderColor: "gainsboro",
+    marginLeft: 5,
   },
 
   directMessageTopText: {

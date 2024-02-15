@@ -262,6 +262,7 @@ const styles = StyleSheet.create({
     height: SCREEN_HEIGHT,
     justifyContent: "center",
     alignItems: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.2)",
   },
   notificationModalContainer: {
     alignItems: "center",
@@ -269,10 +270,11 @@ const styles = StyleSheet.create({
     height: SCREEN_HEIGHT * 0.8,
     marginBottom: SCREEN_HEIGHT * 0.015,
     position: "relative",
-    borderRadius: 30,
     borderWidth: 1,
     borderColor: "lightgrey",
-    backgroundColor: "rgb(255, 255, 240)",
+    backgroundColor: "white",
+    elevation: 5,
+    borderRadius: 10,
   },
 
   notificationTopView: {
@@ -282,8 +284,8 @@ const styles = StyleSheet.create({
     width: SCREEN_WIDTH * 0.85,
     height: SCREEN_HEIGHT * 0.04,
     paddingHorizontal: SCREEN_HEIGHT * 0.01,
-    paddingTop: SCREEN_HEIGHT * 0.01,
-    marginBottom: SCREEN_HEIGHT * 0.01
+    borderBottomWidth: 1,
+    borderColor: "gainsboro",
   },
 
   notificationMiddleView: {

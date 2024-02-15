@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { View, Text, Image, StyleSheet,
   ScrollView, TouchableOpacity, Button,
   Dimensions, ActivityIndicator,
-  TextInput, 
+  TextInput, KeyboardAvoidingView, Platform
 } from "react-native";
 
 import iconClose from "../../assets/icons/close1.png";
@@ -35,6 +35,15 @@ export default function PostDetail (props) {
   const [isScraped, setIsScraped] = useState(post.isScraped);
   const [isLiked, setIsLiked] = useState(post.isLiked);
 
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
+  const scrollViewRef = useRef(null);
+
+  const handleTabPress = async (index) => {
+    setCurrentImageIndex(index);
+    scrollViewRef.current.scrollTo({ x: SCREEN_WIDTH * index * 0.895, animated: true });
+  };
+
   const formatDate = (date) => {
     const day = new Date(date);
 
@@ -54,8 +63,8 @@ export default function PostDetail (props) {
   const getPostData = async () => {
     if (!authToken) {
       setAuthToken(await AsyncStorage.getItem("accessToken"));
-    };
-
+    }; 
+    console.log(props.postId);
     if (!post) {
       await axios.get(
         `${apiUrl}/posts/${props.postId}`,
@@ -172,17 +181,56 @@ export default function PostDetail (props) {
     if (post) {
       return (
         <View>
-          <View style={styles.postDetailTopView}>
-            { post.images.map((image, index) => {
-                return (
-                  <Image
-                    key={index} 
-                    style={styles.postDetailImage}
-                    src={image}
-                  />
-                );
-              })
-            }
+          <View style={styles.postDetailTopViewView}>
+            {post.images.length > 1 && currentImageIndex > 0 && ( 
+              <TouchableOpacity 
+                style={styles.postDetailLeftContainer}
+                onPress={() => {
+                  handleTabPress(currentImageIndex - 1)
+                }} 
+              >
+                <AntDesign
+                  name="left"
+                  size={20}
+                  color="gray"
+                  style={styles.postDetailLeft}
+                />
+              </TouchableOpacity>
+            )}
+            {post.images.length > 1 && currentImageIndex < post.images.length - 1 && ( 
+              <TouchableOpacity 
+                style={styles.postDetailRightContainer}
+                onPress={() => {
+                  handleTabPress(currentImageIndex + 1)
+                  console.log(currentImageIndex);
+                }}
+              >
+                <AntDesign
+                  name="right"
+                  size={20}
+                  color="gray"
+                  style={styles.postDetailRight}
+                />
+              </TouchableOpacity>
+            )}
+            <ScrollView 
+              style={styles.postDetailTopView}
+              horizontal={true}
+              pagingEnabled
+              ref={scrollViewRef}
+              >
+              { post.images.map((image, index) => {
+                  return (
+                    <View key={index} style={styles.postDetailImageView} >
+                      <Image
+                        style={styles.postDetailImage}
+                        src={image}
+                        />
+                    </View>
+                  );
+                })
+              }
+            </ScrollView>
           </View>
   
           <View style={styles.postDetailMiddleView}>
@@ -256,7 +304,7 @@ export default function PostDetail (props) {
               <View style={styles.postDetailCommentContentView}>
                 <Text style={styles.postDetailCommentContent}>{comment.contents}</Text>
               </View>
-              <View style={styles.postDetailCommentRightView}>
+              {/* <View style={styles.postDetailCommentRightView}>
                 <TouchableOpacity>
                   {!comment.haveLiked &&
                     <AntDesign name="like2" size={24} color="black" />
@@ -266,7 +314,7 @@ export default function PostDetail (props) {
                   }
                 </TouchableOpacity>
                 <Text>{comment.likeCnt ? comment.likeCnt : 0}</Text>
-              </View>
+              </View> */}
             </View>
             );
           })}
@@ -280,18 +328,22 @@ export default function PostDetail (props) {
   }
 
   return (
-    <View style={styles.detailModalBackGround}>
+    <KeyboardAvoidingView 
+      style={styles.detailModalBackGround}
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      keyboardVerticalOffset={100}
+    >
       <View style={styles.detailModalContainer}>
+        <TouchableOpacity
+          style={styles.closeView}
+          onPress={props.closeDetailModal}
+        >
+          <Image 
+            style={styles.closeImage}
+            source={iconClose}
+          />
+        </TouchableOpacity>
         <ScrollView style={styles.detailModalScrollView}>
-          <TouchableOpacity
-            style={styles.closeView}
-            onPress={props.closeDetailModal}
-            >
-            <Image 
-              style={styles.closeImage}
-              source={iconClose}
-            />
-          </TouchableOpacity>
 
           {postDetail()}
 
@@ -325,7 +377,7 @@ export default function PostDetail (props) {
           </View>
         </ScrollView>
       </View>
-    </View>
+    </KeyboardAvoidingView>
   );
 }
 
@@ -335,6 +387,10 @@ const styles = StyleSheet.create({
     height: SCREEN_HEIGHT,
     justifyContent: "center",
     alignItems: "center",
+    // backgroundColor: "gray",
+    backgroundColor: "rgba(0,0,0,0.2)",
+    zIndex: 1,
+    // position: "relative",
   },
   detailModalContainer: {
     justifyContent: "center",
@@ -343,37 +399,53 @@ const styles = StyleSheet.create({
     height: SCREEN_HEIGHT * 0.83,
     backgroundColor: "white",
     marginBottom: SCREEN_HEIGHT * 0.035,
-    paddingTop: SCREEN_HEIGHT * 0.02,
-    borderRadius: 30,
-    position: "relative",
+    borderWidth: 1,
+    borderColor: "gainsboro",
+    elevation: 5,
+    zIndex: 3,
+    paddingTop: 25,
+    paddingBottom: 15,
   },
   detailModalScrollView: {
   },
 
   closeView: {
-    width: SCREEN_WIDTH * 0.06,
-    height: SCREEN_WIDTH * 0.06,
+    width: SCREEN_WIDTH * 0.05,
+    height: SCREEN_WIDTH * 0.05,
     position: "absolute",
-    top: 0,
-    right: 5,
+    top: 2,
+    right: 2,
+    zIndex: 10,
   },
   closeImage: {
-    width: SCREEN_WIDTH * 0.06,
-    height: SCREEN_WIDTH * 0.06,
+    width: SCREEN_WIDTH * 0.05,
+    height: SCREEN_WIDTH * 0.05,
+    position: "absolute",
   },
 
+  postDetailTopViewView: {
+    // marginTop: SCREEN_HEIGHT * 0.03,
+    width: SCREEN_WIDTH * 0.894,
+  },
   postDetailTopView: {
-    marginTop: SCREEN_HEIGHT * 0.03,
-    width: SCREEN_WIDTH * 0.9,
+    width: SCREEN_WIDTH * 0.894,
     // height: SCREEN_HEIGHT * 0.31,
+  },
+  postDetailImageView: {
+    width: SCREEN_WIDTH * 0.894,
+    height: SCREEN_HEIGHT * 0.31,
+    // borderRadius: 20,
     justifyContent: "center",
     alignItems: "center",
+    // marginBottom: 20,
+    // borderWidth: 1,
+  
   },
   postDetailImage: {
     width: SCREEN_WIDTH * 0.8,
     height: SCREEN_HEIGHT * 0.31,
     marginVertical: SCREEN_HEIGHT * 0.01,
-    borderRadius: 20,
+    // borderRadius: 20,
   },
   
   postDetailMiddleView: {
@@ -382,6 +454,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     flexDirection: "row",
+    marginBottom: 10,
   },
   postDetailMiddleLeftView: {
     width: SCREEN_WIDTH * 0.5,
@@ -402,27 +475,29 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: 'space-around',
+    marginBottom: 10,
   },
   postDetailLikeCount: {
     fontSize: 20,
     fontWeight: "500",
     color: "rgb(146, 146, 0)",
     marginBottom: SCREEN_HEIGHT * 0.02,
+    marginLeft: 20,
   },
   postDetailLikeIcon: {
-    width: SCREEN_WIDTH * 0.07,
-    height: SCREEN_WIDTH * 0.07,
+    width: SCREEN_WIDTH * 0.06,
+    height: SCREEN_WIDTH * 0.06,
     marginBottom: SCREEN_HEIGHT * 0.02,
   },
   postDetailScrapIcon: {
-    width: SCREEN_WIDTH * 0.07,
-    height: SCREEN_WIDTH * 0.07,
+    width: SCREEN_WIDTH * 0.06,
+    height: SCREEN_WIDTH * 0.06,
     marginBottom: SCREEN_HEIGHT * 0.02,
   },
   
   postDetailContentView: {
     marginTop: SCREEN_HEIGHT * 0.01,
-    marginBottom: SCREEN_HEIGHT * 0.02,
+    marginBottom: SCREEN_HEIGHT * 0.03,
     width: SCREEN_WIDTH * 0.9,
     alignItems: "center",
   },
@@ -436,6 +511,11 @@ const styles = StyleSheet.create({
   postDetailTagListView: {
     flexDirection: "row",
     marginLeft: SCREEN_WIDTH * 0.05,
+    marginRight: SCREEN_WIDTH * 0.05,
+    marginBottom: SCREEN_HEIGHT * 0.001,
+    paddingBottom: 15,
+    // borderBottomWidth: 1,
+    // borderColor: "gainsboro",
   },
   postDetailTagView: {
     backgroundColor: "rgb(180, 180, 180)",
@@ -445,6 +525,7 @@ const styles = StyleSheet.create({
     marginRight: SCREEN_WIDTH * 0.005,
     paddingHorizontal: SCREEN_WIDTH * 0.03,
     paddingVertical: SCREEN_HEIGHT * 0.003,
+    marginRight: 10,
   },
   postDetailTagText: {
     color: "white",
@@ -482,8 +563,8 @@ const styles = StyleSheet.create({
     height: SCREEN_HEIGHT * 0.05,
     flexDirection: "row",
     marginVertical: SCREEN_HEIGHT * 0.005,
-    borderBottomWidth: 1,
-    borderBottomColor: "gray",
+    // borderBottomWidth: 1,
+    // borderBottomColor: "gray",
     paddingBottom: SCREEN_HEIGHT * 0.06,
   },
   postDetailCommentLeftView: {
@@ -519,14 +600,14 @@ const styles = StyleSheet.create({
     width: SCREEN_WIDTH * 0.9,
     alignItems: "center",
     marginVertical: SCREEN_HEIGHT * 0.02,
-    position: "relative",
+    // position: "relative",
   },
   postDetailCommentTextInput: {
     width: SCREEN_WIDTH * 0.8,
     height: SCREEN_HEIGHT * 0.06,
     borderWidth: 1,
-    borderColor: "gray",
-    borderRadius: 15,
+    borderColor: "gainsboro",
+    borderRadius: 8,
     paddingLeft: SCREEN_WIDTH * 0.02,
     fontSize: 17,
   },
@@ -538,9 +619,10 @@ const styles = StyleSheet.create({
     alignItems: "center",
     position: "absolute",
     borderWidth: 1,
-    borderRadius: 15,
-    right: SCREEN_WIDTH * 0.07,
+    borderRadius: 6,
+    right: SCREEN_WIDTH * 0.06,
     top: SCREEN_HEIGHT * 0.005,
+    borderColor: "gainsboro",
   },
   postDetailCommentSubmitText: {
     fontSize: 18,
@@ -552,5 +634,22 @@ const styles = StyleSheet.create({
     height: SCREEN_HEIGHT * 0.3,
     justifyContent: "center",
     alignItems: "center",
-  }
+  },
+  postDetailLeft: {
+    position: "absolute",
+    zIndex: 5,
+    top: 115,
+  },
+  postDetailRight: {
+    position: "absolute",
+    zIndex: 5,
+    top: 115,
+    right: 0,
+  },
+  postDetailLeftContainer: {
+    zIndex: 8,
+  },
+  postDetailRightContainer: {
+    zIndex: 8,
+  },
 });

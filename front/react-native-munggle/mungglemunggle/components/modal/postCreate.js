@@ -195,16 +195,19 @@ export default function PostCreate (props) {
 
     <View style={styles.createModalBackGround}>
       <View style={styles.createModalContainer}>
+        <TouchableOpacity
+          style={styles.closeView}
+          onPress={props.closeCreateModal}
+          >
+          <Image 
+            style={styles.closeImage}
+            source={iconClose}
+          />
+        </TouchableOpacity>
+        <View style={styles.createPostTopView}>
+          <Text style={styles.createPostTopText}>게시물 등록</Text>
+        </View>
         <ScrollView style={styles.createModalScrollView}>
-          <TouchableOpacity
-            style={styles.closeView}
-            onPress={props.closeCreateModal}
-            >
-            <Image 
-              style={styles.closeImage}
-              source={iconClose}
-            />
-          </TouchableOpacity>
 
           <View style={styles.postCreateTopView}>
             {preViewImages()}
@@ -240,7 +243,7 @@ export default function PostCreate (props) {
               </View>
               <View style={styles.postCreateTagCreateView}>
                 <TextInput
-                  placeholder="ex) # 강아지"
+                  placeholder="ex) 태그이름"
                   value={tag}
                   onChangeText={(e) => setTag(e)}
                   style={styles.postCreateTagInput}
@@ -271,7 +274,7 @@ export default function PostCreate (props) {
              style={styles.postCreateSubmitTouchView}
              onPress={createPost}
             >
-              <Text style={styles.postCreateSubmitText}>제출</Text>
+              <Text style={styles.postCreateSubmitText}>게시물 등록</Text>
             </TouchableOpacity>
           </View>
 
@@ -288,16 +291,19 @@ const styles = StyleSheet.create({
     height: SCREEN_HEIGHT,
     justifyContent: "center",
     alignItems: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.2)",
   },
   createModalContainer: {
     justifyContent: "center",
     alignItems: "center",
     width: SCREEN_WIDTH * 0.9,
     height: SCREEN_HEIGHT * 0.8,
-    borderRadius: 30,
+    borderRadius: 10,
     backgroundColor: "white",
     marginBottom: SCREEN_HEIGHT * 0.03,
     position: "relative",
+    borderWidth: 1,
+    borderColor: "gainsboro",
   },
   createModalScrollView: {
   },
@@ -315,7 +321,6 @@ const styles = StyleSheet.create({
   },
 
   postCreateTopView: {
-    marginTop: SCREEN_HEIGHT * 0.03,
     width: SCREEN_WIDTH * 0.8,
     height: SCREEN_HEIGHT * 0.25,
     justifyContent: "center",
@@ -453,15 +458,28 @@ const styles = StyleSheet.create({
   postCreateSubmitTouchView: {
     width: SCREEN_WIDTH * 0.6,
     height: SCREEN_HEIGHT * 0.05,
-    backgroundColor: "rgb(13, 110, 253)",
-    borderWidth: 1,
-    borderRadius: 50,
-    borderColor: "rgb(13, 110, 253)",
+    backgroundColor: "rgb(253, 245, 169)",
+    borderRadius: 10,
     justifyContent: "center",
     alignItems: "center",
+    borderWidth: 1,
+    borderColor: "gainsboro",
   },
   postCreateSubmitText: {
-    color: "white",
+    color: "black",
     fontSize: 20,
+  },
+  createPostTopView: {
+    justifyContent: "center", 
+    alignItems: "center",
+    width: SCREEN_WIDTH * 0.75,
+    height: SCREEN_HEIGHT * 0.05,
+    marginBottom: SCREEN_HEIGHT * 0.005,
+  },
+  createPostTopText: {
+    fontSize: 22, 
+    fontWeight: "600",
+    borderBottomWidth: 2,
+    borderBottomColor: "gray",
   },
 });

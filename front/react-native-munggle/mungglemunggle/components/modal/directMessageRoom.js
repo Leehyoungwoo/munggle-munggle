@@ -249,17 +249,21 @@ const styles = StyleSheet.create({
   },
   dmView : {
     padding: 16,
-    borderRadius: 30,
     borderWidth: 1,
     borderColor: "lightgrey",
-    backgroundColor: "rgb(255, 255, 240)",
+    backgroundColor: "white",
     width: SCREEN_WIDTH * 0.9,
-    height: SCREEN_HEIGHT * 0.78,
+    height: SCREEN_HEIGHT * 0.802,
+    borderRadius: 10,
+    elevation: 5,
   },
   dmViewTopView : {
     flexDirection: "row",
     justifyContent: "space-between", 
-    alignItems: "center"
+    alignItems: "center",
+    borderBottomWidth: 1,
+    borderColor: "gainsboro",
+    paddingBottom: 20,
   },
   topViewText : {
     fontSize: 18,

@@ -74,7 +74,9 @@ export default function ProfilePost (props) {
 const styles = StyleSheet.create({
   profilePostContainer: {
     width: SCREEN_WIDTH,
+    height: SCREEN_HEIGHT,
     alignItems: "center",
+    backgroundColor: "rgb(255, 255, 245)"
   },
   profilePostListView: {
     width: SCREEN_WIDTH,

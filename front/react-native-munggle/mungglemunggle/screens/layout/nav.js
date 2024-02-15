@@ -22,8 +22,9 @@ export default function Nav (props) {
       </TouchableOpacity>
       <TouchableOpacity
        onPress={props.logOut}
+       style={styles.navLogout}
       >
-        <Text>로그아웃</Text>
+        <Text style={styles.navLogoutText}>로그아웃</Text>
       </TouchableOpacity>
       <View style={styles.navIconView}>
         <TouchableOpacity 
@@ -66,6 +67,8 @@ const styles = StyleSheet.create ({
     width: SCREEN_WIDTH,
     height: SCREEN_HEIGHT * 0.08,
     paddingTop: SCREEN_HEIGHT * 0.03,
+    borderBottomWidth: 1,
+    borderBottomColor: "gainsboro",
   },
   navLogoView: {
     flex: 1,
@@ -114,5 +117,15 @@ const styles = StyleSheet.create ({
   navIconDirectMessage: {
     width: SCREEN_WIDTH * 0.075,
     height: SCREEN_HEIGHT * 0.037,
+  },
+  navLogout: {
+    borderWidth: 1,
+    borderColor: "gainsboro",
+    borderRadius: 5,
+    padding: 5,
+    marginTop: 10,
+  },
+  navLogoutText: {
+    color: "gainsboro",
   },
 });
