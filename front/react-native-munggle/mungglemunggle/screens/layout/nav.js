@@ -1,7 +1,6 @@
-import React, {useState} from "react";
+import React from "react";
 import { View, Text, StyleSheet, 
   Image, Dimensions, TouchableOpacity,
-  Modal,
 } from "react-native";
 
 import imageLogo from "../../assets/icons/logo.png"

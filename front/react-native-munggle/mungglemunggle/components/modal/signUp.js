@@ -1,15 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, Image, StyleSheet,
-  ScrollView, TouchableOpacity, Button,
-  Dimensions, Alert,
-  TextInput, 
+import { View, Text, Image, StyleSheet, TouchableOpacity, 
+  Dimensions, TextInput, 
 } from "react-native";
 
-import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import iconClose from "../../assets/icons/close1.png";
 
-import axios, { Axios } from "axios";
+import axios from "axios";
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get("window")
 
@@ -26,14 +23,10 @@ export default function SignUp (props) {
   const [isConfirmEmail, setIsConfirmEmail] = useState(false);
   
   const [isConfirmNickname, setIsConfirmNickname] = useState(false);
-  
-  useEffect(()=> {
-  }, []);
 
   const signUp = () => {
     if (isConfirmEmail && isConfirmNickname && (password1 === password2)) {
       const payLoad = { email, password: password1, nickname };
-      console.log(payLoad);
       axios.post(
         `${apiUrl}/users`,
         payLoad,
@@ -52,7 +45,6 @@ export default function SignUp (props) {
   };
 
   const checkEmail = () => {
-    console.log(email);
     axios.post(
       `${apiUrl}/users/emails/verification-requests?email=${email}`,
       {headers: {
@@ -66,10 +58,7 @@ export default function SignUp (props) {
     })
   };
   
-  const confirmEmail = () => {
-    console.log(email);
-    console.log(checkEmailVal);
-    
+  const confirmEmail = () => {    
     axios.get(
       `${apiUrl}/users/emails/verifications?email=${email}&code=${checkEmailVal}`,
       {headers: {
@@ -85,7 +74,6 @@ export default function SignUp (props) {
     };
     
   const checkNickname = () => {
-    console.log(nickname);
     axios.get(
       `${apiUrl}/users/nickname?nickname=${nickname}`,
       {headers: {

@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import { View, Text, Image, StyleSheet,
-  ScrollView, TouchableOpacity, Button,
+  ScrollView, TouchableOpacity,
   Dimensions, ActivityIndicator,
   TextInput, KeyboardAvoidingView, Platform
 } from "react-native";
@@ -13,7 +13,6 @@ import iconScrapBlack from "../../assets/icons/scrapBlack.png";
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
-import { combineTransition } from "react-native-reanimated";
 
 import { AntDesign } from '@expo/vector-icons';
 
@@ -64,7 +63,6 @@ export default function PostDetail (props) {
     if (!authToken) {
       setAuthToken(await AsyncStorage.getItem("accessToken"));
     }; 
-    console.log(props.postId);
     if (!post) {
       await axios.get(
         `${apiUrl}/posts/${props.postId}`,
@@ -103,9 +101,6 @@ export default function PostDetail (props) {
 
     const payLoad = { contents: commentText };
 
-    console.log(commentText);
-    console.log(props.postId);
-
     await axios.post(
       `${apiUrl}/comments/${props.postId}`,
       payLoad,
@@ -127,8 +122,6 @@ export default function PostDetail (props) {
     if (!authToken) {
       setAuthToken(await AsyncStorage.getItem("accessToken"));
     };
-
-    console.log(props.postId);
 
     await axios.post(
       `${apiUrl}/posts/${props.postId}/scrap`,
@@ -311,7 +304,9 @@ export default function PostDetail (props) {
               <View style={styles.postDetailCommentContentView}>
                 <Text style={styles.postDetailCommentContent}>{comment.contents}</Text>
               </View>
-              {/* <View style={styles.postDetailCommentRightView}>
+              {/* comment like logic
+              
+              <View style={styles.postDetailCommentRightView}>
                 <TouchableOpacity>
                   {!comment.haveLiked &&
                     <AntDesign name="like2" size={24} color="black" />
@@ -394,10 +389,8 @@ const styles = StyleSheet.create({
     height: SCREEN_HEIGHT,
     justifyContent: "center",
     alignItems: "center",
-    // backgroundColor: "gray",
     backgroundColor: "rgba(0,0,0,0.2)",
     zIndex: 1,
-    // position: "relative",
   },
   detailModalContainer: {
     justifyContent: "center",
@@ -431,28 +424,22 @@ const styles = StyleSheet.create({
   },
 
   postDetailTopViewView: {
-    // marginTop: SCREEN_HEIGHT * 0.03,
     width: SCREEN_WIDTH * 0.894,
   },
   postDetailTopView: {
     width: SCREEN_WIDTH * 0.894,
-    // height: SCREEN_HEIGHT * 0.31,
   },
   postDetailImageView: {
     width: SCREEN_WIDTH * 0.894,
     height: SCREEN_HEIGHT * 0.31,
-    // borderRadius: 20,
     justifyContent: "center",
     alignItems: "center",
-    // marginBottom: 20,
-    // borderWidth: 1,
   
   },
   postDetailImage: {
     width: SCREEN_WIDTH * 0.8,
     height: SCREEN_HEIGHT * 0.31,
     marginVertical: SCREEN_HEIGHT * 0.01,
-    // borderRadius: 20,
   },
   
   postDetailMiddleView: {
@@ -520,8 +507,6 @@ const styles = StyleSheet.create({
     marginRight: SCREEN_WIDTH * 0.05,
     marginBottom: SCREEN_HEIGHT * 0.001,
     paddingBottom: 15,
-    // borderBottomWidth: 1,
-    // borderColor: "gainsboro",
   },
   postDetailTagView: {
     backgroundColor: "rgb(180, 180, 180)",
@@ -569,8 +554,6 @@ const styles = StyleSheet.create({
     height: SCREEN_HEIGHT * 0.05,
     flexDirection: "row",
     marginVertical: SCREEN_HEIGHT * 0.005,
-    // borderBottomWidth: 1,
-    // borderBottomColor: "gray",
     paddingBottom: SCREEN_HEIGHT * 0.06,
   },
   postDetailCommentLeftView: {
@@ -606,7 +589,6 @@ const styles = StyleSheet.create({
     width: SCREEN_WIDTH * 0.9,
     alignItems: "center",
     marginVertical: SCREEN_HEIGHT * 0.02,
-    // position: "relative",
   },
   postDetailCommentTextInput: {
     width: SCREEN_WIDTH * 0.8,

@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {useState} from "react";
 import {
   View, TouchableOpacity, Image,
   ScrollView, Text, StyleSheet,
@@ -38,22 +38,6 @@ export default function SearchTagResult (props) {
       return format(day, "yyyy-MM-dd  HH:mm", {locale: ko});
     }
   }
-
-  //게시물 결과에서의 이벤트
-  const handleUserPress = () => {
-    //유저 상세 정보 모달(이용자 결과에서도 사용)
-    console.log("handleUserPress");
-  };
-
-  const handlePostPress = () => {
-    //게시물 상세 정보 모달
-    console.log("handlePostPress");
-  };
-
-  const handleLikePress = () => {
-    //좋아요, 좋아요 취소 전송
-    console.log("handleLikePress");
-  };
 
   const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
           

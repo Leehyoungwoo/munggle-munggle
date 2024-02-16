@@ -152,7 +152,7 @@ export default function MatchResult() {
         "Content-Type": "application/json"
       }}
     ).then((res) => {
-      console.log(res.data);
+      console.log(res.status);
     }).catch((err) => {
       console.log(err);
     })
@@ -182,7 +182,6 @@ export default function MatchResult() {
   const [showOwnerInfo, setShowOwnerInfo] = useState(Array(owners.length).fill(false));
 
   const changeInfo = (index) => {
-    console.log(index);
     const newShowOwnerInfo = [...showOwnerInfo];
     newShowOwnerInfo[index] = !newShowOwnerInfo[index];
     setShowOwnerInfo(newShowOwnerInfo);

@@ -3,7 +3,6 @@ import { View, Text, Image, ScrollView, Dimensions, KeyboardAvoidingView, TextIn
 import send from "../../assets/icons/send.png"
 import close from "../../assets/icons/close1.png"
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { get } from "react-native/Libraries/TurboModule/TurboModuleRegistry";
 import axios, { Axios } from "axios";
 
 
@@ -18,7 +17,6 @@ export default function DirectMessageRoom(props) {
     await AsyncStorage.getItem("accessToken")
     .then((accessToken) => {
       accessTokenRef.current = accessToken;
-      console.log(accessTokenRef.current);
     });
   }
 
@@ -26,12 +24,10 @@ export default function DirectMessageRoom(props) {
     await AsyncStorage.getItem("userId")
     .then((userId) => {
       setMyPK(userId);
-      console.log(userId)
     });
   }
-  const userNickname = props.userNickname;//남
+  const userNickname = props.userNickname;
   const otherUserId = props.otherUserId;
-  const roomId = props.roomId;
   const [messages, setMessages] = useState([]);
   const [inputMessage, setInputMessage] = useState();
   const scrollViewRef = useRef();
@@ -44,7 +40,6 @@ export default function DirectMessageRoom(props) {
         try {
           // GET 요청 보내기
           const response = await axios.get(`http://i10a410.p.ssafy.io:8080/message/${props.roomId}`);
-          // console.log(response.data);
           setMessages(response.data);
         } catch (error) {
           console.error("Error fetching chat room data:", error);
@@ -55,23 +50,16 @@ export default function DirectMessageRoom(props) {
 
       getToken()
         .then(() => {
-          console.log("token");
-          console.log(accessTokenRef.current);
           ws.current = new WebSocket("ws://i10a410.p.ssafy.io:8080/dm",[],{
             headers: {
               Authorization: accessTokenRef.current,
             },
           });
 
-          console.log(ws.current)
           ws.current.onopen = () => {
-              // connection opened
-              console.log("connected")
-              // send a message
           };
 
         ws.current.onmessage = (e) => {
-          console.log("메세지 받음");
           const newMessage = {
             "createAt": new Date().toISOString(),
             "message": JSON.parse(e.data).message,
@@ -86,13 +74,11 @@ export default function DirectMessageRoom(props) {
         });
 
       return () => {
-        console.log("end");
         ws.current.close();
       };
   }, []);
 
   useEffect(()=>{
-    console.log("scroll");
     if (scrollViewRef.current) {
       scrollViewRef.current.scrollToEnd({ animated: false });
     }
@@ -107,9 +93,6 @@ export default function DirectMessageRoom(props) {
     }
       const jsonString = JSON.stringify(message);
       ws.current.send(jsonString);
-
-      console.log("전송");
-      console.log(JSON.stringify(message));
 
       const newMessage = {
         "createAt": new Date().toISOString(),

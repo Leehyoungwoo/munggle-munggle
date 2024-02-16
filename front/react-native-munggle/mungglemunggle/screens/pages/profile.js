@@ -5,7 +5,6 @@ import { View, Text, Button, Image,
   ActivityIndicator,
 } from "react-native";
 
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 
 import ProfileDog from "./profile/profileDog";
@@ -15,7 +14,6 @@ import ProfileScrap from "./profile/profileScrap";
 import iconDog from "../../assets/icons/profileDog.png";
 import iconPost from "../../assets/icons/profilePost.png";
 import iconScrap from "../../assets/icons/profileScrap.png";
-import iconDirectMessage from "../../assets/icons/directMessage.png";
 import iconCreate from "../../assets/icons/create.png";
 
 import iconEdit from "../../assets/icons/infoEdit.png";
@@ -36,7 +34,6 @@ import * as ImageManipulator from 'expo-image-manipulator';
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get("window")
 
-const Tab = createMaterialTopTabNavigator();
 
 export default function ProfileScreen () {
   const apiUrl = "http://i10a410.p.ssafy.io:8080";
@@ -80,7 +77,6 @@ export default function ProfileScreen () {
       }}
     ).then((res) => {
       setProfile(res.data);
-      console.log(res.data);
     }) .catch((err) => {
       console.log(err);
     })
@@ -162,7 +158,6 @@ export default function ProfileScreen () {
         );
 
         // 조절된 이미지 데이터를 얻습니다.
-        console.log('Resized image:', resizedImage.uri);
         return resizedImage;
     } catch (err) {
         console.error('Failed to resize image:', err);
@@ -208,7 +203,6 @@ export default function ProfileScreen () {
     const formData = new FormData();
     formData.append('backgroundImage', { uri: localUri, name: fileName, type});
 
-    console.log(formData);
 
     await axios.put(
       `${apiUrl}/users/background`,
@@ -218,10 +212,8 @@ export default function ProfileScreen () {
         "Content-Type": "multipart/form-data",
       }}
     ).then((res) => {
-      console.log("배경 이미지 변경 ========================");
       console.log(res.status);
     }).catch((err) => {
-      console.log("배경 이미지 변경 ========================");
       console.log(err);
     })
   };
@@ -246,10 +238,8 @@ export default function ProfileScreen () {
         "Content-Type": "multipart/form-data",
       }}
     ).then((res) => {
-      console.log("프로필 이미지 변경==================");
       console.log(res.status);
     }).catch((err) => {
-      console.log("프로필 이미지 변경==================");
       console.log(err);
     })
   };
@@ -268,10 +258,8 @@ export default function ProfileScreen () {
         "Content-Type": "application/json",
       }}
     ).then((res) => {
-      console.log("프로필 데이터 변경==================");
       console.log(res.status);
     }).catch((err) => {
-      console.log("프로필 데이터 변경==================");
       console.log(err);
     })
   };
@@ -614,6 +602,8 @@ export default function ProfileScreen () {
       );
     }
   };
+
+  // dog delete logic
 
   // const deleteDog = () => {
   //   axios.delete(

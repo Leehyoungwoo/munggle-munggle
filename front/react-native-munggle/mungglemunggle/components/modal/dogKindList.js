@@ -1,19 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, Image, StyleSheet,
-  TouchableOpacity, Dimensions, FlatList,
-  Modal, Switch, StatusBar, TextInput, ScrollView, Alert
+  TouchableOpacity, Dimensions,
+  StatusBar, ScrollView, Alert
 } from "react-native";
 
 import iconClose from "../../assets/icons/close1.png";
-import iconSearch from "../../assets/icons/search.png";
-
-import * as ImagePicker from 'expo-image-picker';
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import axios from "axios";
-
-import { AntDesign } from '@expo/vector-icons';
 
 import { ActivityIndicator, RadioButton } from "react-native-paper";
 
@@ -32,10 +27,6 @@ export default function DogKindList (props) {
   const [chooseKind, setChooseKind] = useState("");
 
   useEffect(() => {
-    console.log(chooseKind);
-  }, [chooseKind]); 
-
-  useEffect(() => {
     if (!authToken) {
       setAuthToken(AsyncStorage.getItem("accessToken"));
     };
@@ -45,8 +36,6 @@ export default function DogKindList (props) {
     if (!authToken) {
       setAuthToken(await AsyncStorage.getItem("accessToken"));
     };
-    
-    console.log(authToken); 
 
     if (!kindList) {
       axios.get(

@@ -1,14 +1,8 @@
-import React, { useEffect, useState } from "react";
-import { View, Text, Image, StyleSheet,
-  TouchableOpacity, Dimensions, FlatList,
-  Modal, Switch, StatusBar
+import React, { useState } from "react";
+import { View, Text, Image,
+  TouchableOpacity,
+  Switch, StatusBar
 } from "react-native";
-
-import iconClose from "../../assets/icons/close1.png";
-
-import axios, { Axios } from "axios";
-
-const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get("window")
 
 export default function NotificationSetting (props) {
   const [alarmSetting, setAlarmSetting] = useState(props.alarmSetting);

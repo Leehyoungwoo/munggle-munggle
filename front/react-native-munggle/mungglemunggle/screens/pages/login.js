@@ -22,13 +22,8 @@ export default function LoginScreen (props) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
-  useEffect(() => {
-    console.log(AsyncStorage.getItem("isLogin"));
-  }, []);
-
   const handleLogin = () => {
     const payLoad = { username, password };
-    console.log(payLoad);
 
     axios.post(
       `${apiUrl}/login`,
@@ -120,7 +115,9 @@ export default function LoginScreen (props) {
           </TouchableOpacity>
         </View>
         
-        {/* <View style={styles.underLineView}>
+        {/*  sns login logic
+        
+        <View style={styles.underLineView}>
           <View style={styles.underLineSideView} />
           <View style={styles.underLineCenterView}>
             <Text style={styles.underLineText}>또는</Text>

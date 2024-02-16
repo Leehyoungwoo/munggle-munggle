@@ -15,7 +15,7 @@ import iconMatch from "../../assets/icons/match.png";
 import iconProfile from "../../assets/icons/profile.png";
 
 const Tab = createBottomTabNavigator();
-const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get("window")
+const { height: SCREEN_HEIGHT } = Dimensions.get("window")
 
 
 const TabBarIcon = ({ image }) => {
@@ -23,7 +23,6 @@ const TabBarIcon = ({ image }) => {
 
   useEffect(() => {
     const unsubscribe = navigation.addListener('state', (e) => {
-      console.log("Current Screen:", e.data.state.routes[e.data.state.index].name);
     });
 
     return unsubscribe;

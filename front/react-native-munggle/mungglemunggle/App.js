@@ -13,6 +13,7 @@ import Search from './components/modal/search';
 import Notification from './components/modal/notification';
 import DirectMessage from './components/modal/directMessage';
 
+// 화면비율
 // nav : 10 %
 // body : 82 %
 // footer : 8 %
@@ -24,7 +25,6 @@ const getFonts = () => Font.loadAsync({
 });
 
 export default function App() {
-  console.log(AsyncStorage.getItem("isLogin"));
   
   const [isLogin, setIsLogin] = useState(false);
   

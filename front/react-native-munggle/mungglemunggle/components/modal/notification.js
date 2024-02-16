@@ -1,29 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, Image, StyleSheet,
   TouchableOpacity, Dimensions, FlatList,
-  Modal, Switch, StatusBar
+  Modal
 } from "react-native";
-
-import iconClose from "../../assets/icons/close1.png";
-
-import axios, { Axios } from "axios";
 
 import NotificationSetting from "./notificationSetting";
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get("window")
 
-/*
-받는 데이터 가정:
-action값 기준
-1. 내 게시물 좋아요
-2. 내 게시물 댓글
-3. 누군가 나를 팔로우
-
-출력:
-image(profileurl) "${nickname}님이 회원님을 팔로우하기 시작했습니다." 시간 버튼 -> 누르면 프로필(memberNo)로 연결
-image(profileurl) "${nickname}님이 댓글을 남겼습니다: ${contents}" 시간 버튼 -> 누르면 게시물(articleNo)로 연결
-image(profileurl) "${nickname}님이 회원님의 게시물을 좋아합니다." 시간 버튼 -> 누르면 게시물(articleNo)로 연결
-*/
 
 export default function Notification (props) {
 

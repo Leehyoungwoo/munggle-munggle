@@ -63,11 +63,8 @@ const Users = [
   }
 ];
 
-
-
-
 const DraggableBox = ({ index, image, panResponder, pan, size, weight, gender,
-   isNeutering, name, description, onHeartPress, onBrokenHeartPress }) => (
+   isNeutering, name, description }) => (
   <Animated.View
     style={[
       styles.box,
@@ -96,6 +93,8 @@ export default function MatchStart () {
   const [authToken, setAuthToken] = useState("");
 
   const [matchDogList, setMatchDogList] = useState(false);
+
+  // match result logic
 
   // const getMatchResult = async () => {
   //   if (!authToken) {
@@ -197,7 +196,6 @@ export default function MatchStart () {
     if(cur<length){
       setCur(cur+1);}
     const index = boxes.length - 1;
-    console.log(boxes.length)
     if (!isButtonDisabled && boxes.length > 0) {
       setIsButtonDisabled(true);
       Animated.spring(boxes[index].pan, {
@@ -214,7 +212,6 @@ export default function MatchStart () {
     if(cur<length){
       setCur(cur+1);}
     const index = boxes.length - 1;
-    console.log(boxes.length)
     if (!isButtonDisabled && boxes.length > 0) {
       setIsButtonDisabled(true);
       Animated.spring(boxes[index].pan, {

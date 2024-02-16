@@ -1,15 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { StatusBar, View, Text, Image, Switch, 
-  Button, ScrollView, StyleSheet,
-  Dimensions, TouchableOpacity, Alert, Modal, FlatList
+import { StatusBar, View, Text, Image, StyleSheet,
+  Dimensions, TouchableOpacity, Modal, FlatList
 } from "react-native";
-import ToggleSwitch from 'toggle-switch-react-native';
 
 import imageWink from "../../../assets/icons/wink.png";
 import imageNose from "../../../assets/icons/nose.png";
 import iconInfoEdit from "../../../assets/icons/infoEdit.png";
 import { useNavigation } from "@react-navigation/native";
-import profile from "../../../assets/icons/profile.png";
 
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -40,7 +37,6 @@ export default function MatchMain () {
       }}
     ).then((res) => {
       setProfile(res.data);
-      console.log(res.data);
     }) .catch((err) => {
       console.log(err);
     })
@@ -58,7 +54,6 @@ export default function MatchMain () {
       }}
     ).then((res) => {
       setDogList(res.data);
-      console.log(res.data);
     }).catch((err) => {
       console.log(err);
     })
@@ -307,16 +302,16 @@ export default function MatchMain () {
               data={dogList}
               keyExtractor={(item) => item.dogId.toString()}
               renderItem={({ item }) => (
-                <TouchableOpacity 
-                  style={styles.imageContainer} 
-                  onPress={() => {
-                    setChooseMyDog(item);
-                    closeDogModal();
-                  }}
-                >
-                  <Image src={item.image} style={styles.image} />
-                  <Text>{item.name}</Text>
-                </TouchableOpacity>
+              <TouchableOpacity 
+                style={styles.imageContainer} 
+                onPress={() => {
+                  setChooseMyDog(item);
+                  closeDogModal();
+                }}
+              >
+                <Image src={item.image} style={styles.image} />
+                <Text>{item.name}</Text>
+              </TouchableOpacity>
             )}
           />
           </View>

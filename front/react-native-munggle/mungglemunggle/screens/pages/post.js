@@ -1,11 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, Button,
-  Image, Modal, Pressable,
+import { View, Text, 
+  Image, Modal, 
   ScrollView, TouchableOpacity,
   StyleSheet, Dimensions,
   ActivityIndicator,
-  ImageBackground,
-  KeyboardAvoidingView,
 } from "react-native";
 
 import ProfileCircle from "../../components/profileCircle";
@@ -24,9 +22,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 
 import { format, formatDistanceToNow } from "date-fns";
-import { el, ko } from "date-fns/locale";
-
-import imageBack from "../../assets/images/back4.jpg"
+import { ko } from "date-fns/locale";
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get("window")
 
@@ -68,7 +64,6 @@ export default function PostScreen () {
         "Authorization": authToken ,
       }}
     ).then((res) => {
-      // console.log(res.data);
       setPostList(res.data);
     }) .catch((err) => {
       console.log(err);
@@ -80,7 +75,6 @@ export default function PostScreen () {
       setAuthToken(await AsyncStorage.getItem("accessToken"));
     };
 
-    // console.log(!followingPostList);
 
     if (!followingPostList) {
       await axios.get(
@@ -90,7 +84,6 @@ export default function PostScreen () {
         }}
       ).then((res) => {
         setFollowingPostList(res.data);
-        // console.log(followingPostList);
       }) .catch((err) => {
         console.log(err);
       })
@@ -101,9 +94,7 @@ export default function PostScreen () {
     if (!authToken) {
       setAuthToken(await AsyncStorage.getItem("accessToken"));
     };
-  
-    // console.log(!followingPostList);
-  
+    
     if (!recommendUserList) {
       await axios.get(
         `${apiUrl}/users/recommend`,
@@ -126,11 +117,8 @@ export default function PostScreen () {
   
   useEffect(() => {
     getPost();
-    // console.log(postList);
     getFollowingPost();
-    // console.log(followingPostList);
     getRecommendUser();
-    // console.log(recommendUserList);
   }, [authToken]);
 
   const profiles = () => {
@@ -380,13 +368,10 @@ export default function PostScreen () {
 const styles = StyleSheet.create({
   postContainer: {
     width: SCREEN_WIDTH,
-    // backgroundColor: "rgb(249, 250, 208)",
-    // backgroundColor: "rgb(249, 250, 208)",
     position: "relative",
   },
   postScrollView: {
     width: SCREEN_WIDTH,
-    // backgroundColor: "white",
   },
   postTopView: {
     width: SCREEN_WIDTH,
@@ -402,8 +387,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
-    // borderBottomWidth: 1,
-    // borderColor: "gainsboro",
   },
   postToggleButtonLeft: {
     width: SCREEN_WIDTH * 0.17,
@@ -456,7 +439,6 @@ const styles = StyleSheet.create({
   },
   profileCircleImage: {
     borderRadius: 100,
-    // borderColor: "rgb(253, 255, 117)",
     borderColor: "lightgrey",
     borderWidth: 1,
     width: SCREEN_WIDTH * 0.18,
@@ -479,9 +461,7 @@ const styles = StyleSheet.create({
     width: SCREEN_WIDTH,
     alignItems: "center",
     paddingTop: 10,
-    // backgroundColor: "rgb(249, 250, 208)",
     backgroundColor: "rgb(255, 255, 245)",
-    // backgroundColor: "gainsboro",
   },
   postListView: {
     marginVertical: 10,
@@ -506,7 +486,6 @@ const styles = StyleSheet.create({
   postListProfileButtonView: {
     flexDirection: "row",
     width: SCREEN_WIDTH * 0.235,
-    // justifyContent: "space-between",
     marginLeft: 5,
   },
   postListViewRightView: {

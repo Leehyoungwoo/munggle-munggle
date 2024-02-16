@@ -1,11 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { Modal, Dimensions, StyleSheet, View, Text, Image, TouchableOpacity, ScrollView } from 'react-native';
+import { Dimensions, StyleSheet, View, Text, Image, TouchableOpacity, ScrollView } from 'react-native';
 import back from '../../../assets/icons/back.png';
-import change from '../../../assets/icons/change.png';
-import RadioButtonGroup, { RadioButtonItem } from "expo-radio-button";
-import dm from '../../../assets/icons/directMessage.png';
 import { useNavigation } from '@react-navigation/native';
-import ModalComponent from '../../../components/modal/directMessage';
 
 import { RadioButton } from "react-native-paper";
 
@@ -15,11 +11,6 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get("window")
-
-const dog =  {
-  "dogId": 1,
-  "characterId": ["말썽꾸러기", "모험을 좋아함", "사냥꾼", "상냥함"],
-  "isNeutering": false}
 
 export default function MatchWantSetting(props) {
   const apiUrl = "http://i10a410.p.ssafy.io:8080";
@@ -134,8 +125,6 @@ export default function MatchWantSetting(props) {
       isNeutering: isNeutering,
     }
 
-    console.log(payLoad);
-
     await axios.post(
       `${apiUrl}/dog-match`,
       payLoad,
@@ -156,10 +145,6 @@ export default function MatchWantSetting(props) {
       setAuthToken(AsyncStorage.getItem("accessToken"));
     };
   }, []);
-
-  // useEffect(() => {
-  // }, [authToken]);
-
 
   const characterContent = () => {
     return (

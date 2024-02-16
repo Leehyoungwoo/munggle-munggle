@@ -1,6 +1,6 @@
 import React, {useState, useRef, useEffect} from 'react';
 import {StyleSheet, ScrollView, Text, View, Dimensions,
-TouchableOpacity, Image, TextInput, Modal, ActivityIndicator
+TouchableOpacity, Image, TextInput, Modal, 
 } from 'react-native';
 
 import iconClose from "../../assets/icons/close1.png";
@@ -84,7 +84,6 @@ export default function Search(props) {
         "Authorization": authToken._j,
       }}
     ).then((res) => {
-      console.log(res.data);
       setSearchPosts(res.data.posts);
     }).catch((err) => {
       console.log(err);
@@ -102,7 +101,6 @@ export default function Search(props) {
         "Authorization": authToken._j ,
       }}
     ).then((res) => {
-      console.log(res.data);
       setSearchUsers(res.data);
     }).catch((err) => {
       console.log(err);
@@ -120,7 +118,6 @@ export default function Search(props) {
         "Authorization": authToken._j ,
       }}
     ).then((res) => {
-      console.log(res.data);
       setSearchTags(res.data);
     }).catch((err) => {
       console.log(err);
@@ -132,15 +129,12 @@ export default function Search(props) {
       setAuthToken(await AsyncStorage.getItem("accessToken"));
     };
 
-    console.log(authToken._j)
-
     await axios.get(
       `${apiUrl}/search/post?type=tag&word=${tagName}&page=${0}`,
       {headers: {
         "Authorization": authToken._j ,
       }}
     ).then((res) => {
-      console.log(res.data);
       setTagSearchPosts(res.data.posts);
     }).catch((err) => {
       console.log(err);
@@ -152,17 +146,6 @@ export default function Search(props) {
     //유저 상세 정보 모달(이용자 결과에서도 사용)
     console.log("handleUserPress");
   };
-
-  const handlePostPress = () => {
-    //게시물 상세 정보 모달
-    console.log("handlePostPress");
-  };
-
-  const handleLikePress = () => {
-    //좋아요, 좋아요 취소 전송
-    console.log("handleLikePress");
-  };
-
 
   //탭바 눌렀을때 해당 내용으로 이동
   const handleTabPress = async (index) => {

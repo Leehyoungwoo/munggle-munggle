@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from "react";
-import { View, ScrollView, ActivityIndicator, Text, Image, StyleSheet, Dimensions } from "react-native";
+import React from "react";
+import { View, ActivityIndicator, Text, Image, StyleSheet, Dimensions } from "react-native";
 
-import { format, formatDistanceToNow } from "date-fns";
+import { format } from "date-fns";
 import { ko } from "date-fns/locale";
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get("window")
@@ -146,9 +146,6 @@ const styles = StyleSheet.create({
     alignItems: "flex-start",
     marginLeft: 20,
     
-  },
-  profileDogViewBottomText: {
-
   },
 
   profileDogDescriptionView: {

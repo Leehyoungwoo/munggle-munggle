@@ -2,7 +2,7 @@ import React from "react";
 import { TouchableOpacity, Image, StyleSheet, Dimensions } from "react-native";
 import iconDirectMessage from "../assets/icons/directMessage.png";
 
-const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get("window")
+const { height: SCREEN_HEIGHT } = Dimensions.get("window")
 
 export default function DirectMessageButton () {
   return (

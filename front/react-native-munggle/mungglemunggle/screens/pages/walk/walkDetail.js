@@ -1,6 +1,5 @@
-import React, { useState } from "react";
-import { View, Text, Modal, StyleSheet, Dimensions, TouchableOpacity, Alert } from "react-native";
-import axios from "axios";
+import React from "react";
+import { View, Text } from "react-native";
 
 export default function WalkDetail({ details }) {
 

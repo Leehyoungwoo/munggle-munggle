@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, Image, StyleSheet,
   TouchableOpacity, Dimensions, FlatList,
-  Modal, Switch, StatusBar, TextInput, KeyboardAvoidingView, Platform
+  Modal, StatusBar, TextInput
 } from "react-native";
 import iconClose from "../../assets/icons/close1.png";
 import DirectMessageRoom from "./directMessageRoom";
-import WS from "react-native-websocket";
 import { AntDesign } from '@expo/vector-icons';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -16,8 +15,6 @@ const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get("window")
 export default function DirectMessage (props) {
   const apiUrl = "http://i10a410.p.ssafy.io:8080";
   const [authToken, setAuthToken] = useState("");
-
-  const defaultImage = require("../../assets/icons/profile.png");
 
   const [createModalVisible, setCreateModalVisible] = useState(false);
   const [chatModalVisible, setChatModalVisible] = useState(false);
@@ -51,15 +48,12 @@ export default function DirectMessage (props) {
       setAuthToken(await AsyncStorage.getItem("accessToken"));
     };
 
-    console.log(authToken._j)
-
     await axios.get(
       `${apiUrl}/message`,
       {headers: {
         "Authorization": authToken._j,
       }}
     ).then((res) => {
-      console.log(res.data);
       setChatRoom(res.data);
     }).catch((err) => {
       console.log(err);
@@ -184,8 +178,6 @@ export default function DirectMessage (props) {
           {renderChatRoom()}
 
           <TouchableOpacity style={{position: "absolute", bottom: 0, right: 10, marginRight: SCREEN_WIDTH * 0.01, width: SCREEN_WIDTH * 0.2, height: SCREEN_WIDTH * 0.2}} onPress={() => setCreateModalVisible(true)}>
-              {/* <Image source={require("../../assets/icons/plus.png")} style={{ position:"absolute", width: 70, height: 70,
-            right: 20, bottom: 20 }} /> */}
               <AntDesign name="pluscircleo" size={60} color="rgb(13, 110, 253)" style={{  }} />
           </TouchableOpacity>
 

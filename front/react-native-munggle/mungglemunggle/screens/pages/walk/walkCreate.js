@@ -1,14 +1,15 @@
-import React, { useEffect, useRef, useState } from "react";
-import { View, Text, Button, ScrollView, StyleSheet, Dimensions, TouchableOpacity, Alert, Platform, KeyboardAvoidingView, TextInput, Image } from "react-native";
+import React, { useState } from "react";
+import { 
+  View, Text, ScrollView, StyleSheet, 
+  Dimensions, TouchableOpacity, Platform, 
+  KeyboardAvoidingView, TextInput, Image 
+} from "react-native";
 import { FontAwesome } from '@expo/vector-icons';
 import Checkbox from "expo-checkbox";
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get("window")
 
 export default function WalkCreate ({ duration, locations, distance, image }) {
-  console.log(image);
-  console.log(duration);
-  console.log(locations);
   const apiUrl = "http://i10a410.p.ssafy.io:8080";
 
   const [title, setTitle] = useState("");
@@ -17,31 +18,6 @@ export default function WalkCreate ({ duration, locations, distance, image }) {
   const [isPrivate, setIsPrivate] = useState(false);
 
   const [rating, setRating] = useState(0);
-
-  const example = [
-    {
-      "walkName": "강아지 와의 산책",
-      "dogId": 1,
-      "duration": 11,
-      "distance": 11,
-      "rating": 4,
-      "isPrivate": isPrivate,
-      "description": "2222좋아요",
-      "location": [{
-          "lat": 1.123,
-          "lng": 2.222,
-        },
-        {
-          "lat": 1.133,
-          "lng": 2.232,
-        },
-        {
-          "lat": 1.143,
-          "lng": 2.242,
-        }
-      ]
-    }
-  ]
 
   const handleRatingChange = (selectedRating) => {
     setRating(selectedRating);
@@ -197,9 +173,6 @@ const styles = StyleSheet.create({
     paddingBottom: 6,
     paddingTop: 17,
   },
-  createModalScrollView: {
-    
-  },
 
   closeView: {
     width: SCREEN_WIDTH * 0.05,
@@ -286,7 +259,6 @@ const styles = StyleSheet.create({
     zIndex: 6,
     width: SCREEN_WIDTH * 0.9,
     height: SCREEN_HEIGHT * 0.41,
-    // backgroundColor: "rgb(253, 245, 169)",
     borderRadius: 15,
   },
   walkCreateImage: {
@@ -320,20 +292,17 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     textAlign: "center",
-    // borderWidth: 1,
     marginTop: 5,
   },
   walkCreateRating: {
     flexDirection: 'row',
     width: SCREEN_WIDTH * 0.9,
     height: 30,
-    // borderWidth: 1,
     justifyContent: "center",
     alignItems: "center",
     textAlign: "center",
   },
   walkCreateNumbers: {
-    // flexDirection: "row",
     width: SCREEN_WIDTH * 0.85,
     paddingTop: SCREEN_HEIGHT * 0.01,
     paddingLeft: SCREEN_WIDTH * 0.02,
@@ -360,7 +329,5 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     marginTop: 5,
-  },
-  checkBox: {
   },
 });

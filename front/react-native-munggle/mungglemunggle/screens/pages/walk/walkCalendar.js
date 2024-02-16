@@ -1,8 +1,7 @@
 import React, { useState } from "react";
-import { View, Text, Modal, StyleSheet, Dimensions, TouchableOpacity, Alert } from "react-native";
+import { View, Text, Modal, StyleSheet, Dimensions, TouchableOpacity } from "react-native";
 import { Calendar } from "react-native-calendars";
 import WalkDetail from "./walkDetail";
-import axios, { Axios } from "axios";
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get("window")
 
@@ -135,7 +134,6 @@ export default function WalkCalendar() {
 
   const isSameDate = (date1, date2) => {
     const d1 = new Date(date1);
-    console.log(d1);
     const d2 = new Date(date2);
     return d1.getFullYear() === d2.getFullYear() &&
            d1.getMonth() === d2.getMonth() &&

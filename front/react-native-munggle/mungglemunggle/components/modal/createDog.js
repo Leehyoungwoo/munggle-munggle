@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, Image, StyleSheet,
-  TouchableOpacity, Dimensions, FlatList,
-  Modal, Switch, StatusBar, TextInput
+  TouchableOpacity, Dimensions,
+  Modal, StatusBar, TextInput
 } from "react-native";
 
 import iconClose from "../../assets/icons/close1.png";
@@ -14,9 +14,6 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 
 import { AntDesign } from '@expo/vector-icons';
-
-import { format, formatDistanceToNow } from "date-fns";
-import { ko } from "date-fns/locale";
 
 import { RadioButton } from "react-native-paper";
 
@@ -36,8 +33,6 @@ export default function CreateDog (props) {
   const formatDate = (date) => {
     const day = new Date(date);
 
-    console.log(day);
-
     return day.toISOString();
   }
 
@@ -50,8 +45,6 @@ export default function CreateDog (props) {
             { compress: 1, format: "jpeg" } // 압축 및 형식 설정
         );
 
-        // 조절된 이미지 데이터를 얻습니다.
-        console.log('Resized image:', resizedImage.uri);
         return resizedImage;
     } catch (err) {
         console.error('Failed to resize image:', err);
@@ -100,8 +93,6 @@ export default function CreateDog (props) {
     if (response.canceled) {
       return null;
     }
-    console.log(response.assets[0].uri);
-
     setImageUrl(response.assets[0]);
   };
 
@@ -119,8 +110,6 @@ export default function CreateDog (props) {
     const type = match ? `image/${match[1]}` : `image`;
 
     formData.append("file", { uri: localUri, name: fileName, type});
-
-    console.log(formData);
 
     await axios.put(
       `${apiUrl}/dogs/${dogId}/image`,
@@ -146,8 +135,6 @@ export default function CreateDog (props) {
       setAuthToken(await AsyncStorage.getItem("accessToken"));
     };
 
-    console.log(authToken);
-
     const payLoad = {
       kindId: kindId,
       birthDate: formatDate(`${birthDate}`),
@@ -157,8 +144,6 @@ export default function CreateDog (props) {
       description: description,
     };
 
-    console.log(payLoad);
-
     await axios.post(
       `${apiUrl}/dogs`,
       payLoad,
@@ -167,7 +152,6 @@ export default function CreateDog (props) {
         "Content-Type": "application/json",
       }}
     ).then(async (res) => {
-      console.log(res.data);
       await createDogImage(res.data);
     }).catch((err) => {
       console.log(err)

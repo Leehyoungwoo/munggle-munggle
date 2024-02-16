@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { TouchableOpacity, Text, StyleSheet, Dimensions } from "react-native";
 
 import axios from "axios";
 
-const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get("window")
+const { height: SCREEN_HEIGHT } = Dimensions.get("window")
 
 export default function FollowButton (props) {  
   const [isFollowed, setIsFollowed] = useState(props.isFollowed);
@@ -33,7 +33,6 @@ export default function FollowButton (props) {
           "Authorization": props.authToken ,
         }}
       ).then((res) => {
-        console.log("팔로우");
         console.log(res.status);
         setIsFollowed(!isFollow);
       }).catch((err) => {
@@ -46,7 +45,6 @@ export default function FollowButton (props) {
           "Authorization": props.authToken ,
         }}
       ).then((res) => {
-        console.log("언팔로우");
         console.log(res.status);
         setIsFollowed(!isFollow);
       }).catch((err) => {

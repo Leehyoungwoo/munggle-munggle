@@ -1,6 +1,6 @@
-import React, { startTransition, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { View, Image, StyleSheet,
-  ScrollView, TouchableOpacity, Button,
+  ScrollView, TouchableOpacity,
   Dimensions, Text,
   TextInput,
   KeyboardAvoidingView,
@@ -11,13 +11,11 @@ import * as ImagePicker from 'expo-image-picker';
 
 import iconClose from "../../assets/icons/close1.png";
 import iconCamera from "../../assets/icons/camera.png";
-import iconSend from "../../assets/icons/send.png";
 
 import { AntDesign } from '@expo/vector-icons';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import axios from "axios";
-import { Header } from "react-native/Libraries/NewAppScreen";
 
 import * as ImageManipulator from 'expo-image-manipulator';
 
@@ -50,8 +48,6 @@ export default function PostCreate (props) {
       hashtags: tags,
     };
 
-    console.log(payLoad)
-
     await axios.post(
       `${apiUrl}/posts`,
       payLoad,
@@ -61,7 +57,6 @@ export default function PostCreate (props) {
       }}
     ).then((res) => {
       setPostId(res.data);
-      console.log(res.data);
     }).catch((err) => {
       console.log(err);
     });
@@ -76,7 +71,6 @@ export default function PostCreate (props) {
         );
 
         // 조절된 이미지 데이터를 얻습니다.
-        console.log('Resized image:', resizedImage.uri);
         return resizedImage;
     } catch (err) {
         console.error('Failed to resize image:', err);
@@ -98,7 +92,6 @@ export default function PostCreate (props) {
       const type = match ? `image/${match[1]}` : `image`;
 
       formData.append("file", { uri: localUri, name: fileName, type});
-      console.log(postId);
       await axios.post(
         `${apiUrl}/posts/${postId}/image`,
         formData,
@@ -136,8 +129,6 @@ export default function PostCreate (props) {
     if (response.canceled) {
       return null;
     }
-    console.log(response.assets[0].uri);
-
     await setImages([...images, response.assets[0]]);
   };
 

@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {useState} from "react";
 import { View, Text, ScrollView, ActivityIndicator, 
   Dimensions, StyleSheet, Image, TouchableOpacity,
   Modal, 
@@ -7,7 +7,6 @@ import MasonryList from '@react-native-seoul/masonry-list';
 
 import PostDetail from "../../../components/modal/postDetail";
 
-// 이미지 사이즈를 react native crop 으로 조정할 것이기 때문에 지금은 사이즈 조절 x
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get("window")
 
@@ -48,8 +47,6 @@ export default function ProfileScrap (props) {
     if (scrapList) {
       return (
         <MasonryList
-          // loading={true}
-          // LoadingView={<ActivityIndicator/>}
           data={scrapList}
           renderItem={renderItem}
           keyExtractor={(item, index) => index.toString()}
