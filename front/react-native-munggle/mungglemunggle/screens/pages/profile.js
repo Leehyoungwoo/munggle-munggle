@@ -1,5 +1,9 @@
-import React from "react";
-import { View, Text, Button, Image, ScrollView, StyleSheet, Dimensions, TouchableOpacity } from "react-native";
+import React, { useEffect, useId, useState, useRef } from "react";
+import { View, Text, Button, Image, 
+  ScrollView, StyleSheet, Dimensions, 
+  TouchableOpacity, Modal, TextInput,
+  ActivityIndicator,
+} from "react-native";
 
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
@@ -12,304 +16,667 @@ import iconDog from "../../assets/icons/profileDog.png";
 import iconPost from "../../assets/icons/profilePost.png";
 import iconScrap from "../../assets/icons/profileScrap.png";
 import iconDirectMessage from "../../assets/icons/directMessage.png";
+import iconCreate from "../../assets/icons/create.png";
 
-import imgProfile1 from "../../assets/sample/profile1.jpg";
-import imgProfile2 from "../../assets/sample/profile2.jpg";
-import imgProfile3 from "../../assets/sample/profile3.jpg";
-import imgProfile4 from "../../assets/sample/profile4.jpg";
-import imgProfile5 from "../../assets/sample/profile5.jpg";
-import imgProfile6 from "../../assets/sample/profile6.jpg";
-
-import imgPost1 from "../../assets/sample/dog1.jpg";
-import imgPost2 from "../../assets/sample/dog2.jpg";
-import imgPost3 from "../../assets/sample/dog3.jpg";
-import imgPost4 from "../../assets/sample/dog4.jpg";
-import imgPost5 from "../../assets/sample/dog5.jpg";
-import imgPost6 from "../../assets/sample/dog6.jpg";
-import imgPost7 from "../../assets/sample/dog7.jpg";
-import imgPost8 from "../../assets/sample/dog8.jpg";
-import imgPost9 from "../../assets/sample/dog9.jpg";
-import imgPost10 from "../../assets/sample/dog10.jpg";
+import iconEdit from "../../assets/icons/infoEdit.png";
 
 import FollowButton from "../../components/followButton";
 import DirectMessageButton from "../../components/directMessageButton";
+
+import imgDefaultProfile from "../../assets/icons/defaultProfile.png";
+
+import axios from "axios";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { AntDesign } from '@expo/vector-icons';
+import * as ImagePicker from 'expo-image-picker';
+
+import CreateDog from "../../components/modal/createDog";
+
+import * as ImageManipulator from 'expo-image-manipulator';
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get("window")
 
 const Tab = createMaterialTopTabNavigator();
 
-export default function ProfileScreen ( {navigation} ) {
-  const userProfile = {
-    backGroundImg: imgPost1,
-    profileImg: imgProfile1,
-    name: "행복이아빠",
-    isFollow: false,
-    description: "소소하게 자주 즐겁게 행복하기. 행복이 행복이 행복이 행복이 행복이 행복이 행복이 행복이",
-    follower: 2,
-    following: 3,
-    dogs: [
-      {
-        img: imgPost1,
-        name: "김행복",
-        kind: "웰시코기",
-        weight: 2.8,
-        birthDate: "22.02.08",
-        gender: "남자",
-      },
-      {
-        img: imgPost2,
-        name: "댕댕이",
-        kind: "리트리버",
-        weight: 12.3,
-        birthDate: "22.02.08",
-        gender: "여자",
-      },
-    ]
-  } 
+export default function ProfileScreen () {
+  const apiUrl = "http://i10a410.p.ssafy.io:8080";
 
-  const postList = [
-    {
-      id: 1,
-      user : {
-        imgProfile: imgProfile1,
-        name: 'user1',
-        isFollow: false,
-      },
-      imgPost: imgPost1,
-      title: "산책하는 댕댕이",
-      content: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries,",
-      createdAt: "2024-01-17",
-      tagList: [
-        "산책", "코기", "신났네",
-      ],
-    },
-    {
-      id: 2,
-      user : {
-        imgProfile: imgProfile2,
-        name: 'user2',
-        isFollow: false,
-      },
-      imgPost: imgPost2,
-      title: "애기랑 오랜만에 공원",
-      content: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries,",
-      createdAt: "2024-01-17",
-      tagList: [
-        "산책", "아구", "힘들어?",
-      ],
-    },
-    {
-      id: 3,
-      user : {
-        imgProfile: imgProfile3,
-        name: 'user3',
-        isFollow: false,
-      },
-      imgPost: imgPost3,
-      title: "귀여워라",
-      content: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries,",
-      createdAt: "2024-01-17",
-      tagList: [
-        "신남", "댕글댕글",
-      ],
-    },
-    {
-      id: 4,
-      user : {
-        imgProfile: imgProfile4,
-        name: 'user4',
-        isFollow: false,
-      },
-      imgPost: imgPost4,
-      title: "산책하는 댕댕이",
-      content: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries,",
-      createdAt: "2024-01-17",
-      tagList: [
-        "산책", "댕댕이", "신났네",
-      ],
-    },
-    {
-      id: 5,
-      user : {
-        imgProfile: imgProfile5,
-        name: 'user5',
-        isFollow: false,
-      },
-      imgPost: imgPost5,
-      title: "산책하는 댕댕이",
-      content: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries,",
-      createdAt: "2024-01-17",
-      tagList: [
-        "산책", "댕댕이", "신났네",
-      ],
-    },
-    {
-      id: 6,
-      user : {
-        imgProfile: imgProfile6,
-        name: 'user6',
-        isFollow: false,
-      },
-      imgPost: imgPost6,
-      title: "산책하는 댕댕이",
-      content: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries,",
-      createdAt: "2024-01-17",
-      tagList: [
-        "산책", "댕댕이", "신났네",
-      ],
-    },
-    {
-      id: 7,
-      user : {
-        imgProfile: imgProfile1,
-        name: 'user7',
-        isFollow: false,
-      },
-      imgPost: imgPost7,
-      title: "산책하는 댕댕이",
-      content: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries,",
-      createdAt: "2024-01-17",
-      tagList: [
-        "산책", "댕댕이", "신났네",
-      ],
-    },
-    {
-      id: 8,
-      user : {
-        imgProfile: imgProfile2,
-        name: 'user8',
-        isFollow: false,
-      },
-      imgPost: imgPost8,
-      title: "산책하는 댕댕이",
-      content: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries,",
-      createdAt: "2024-01-17",
-      tagList: [
-        "산책", "댕댕이", "신났네",
-      ],
-    },
-    {
-      id: 9,
-      user : {
-        imgProfile: imgProfile3,
-        name: 'user9',
-        isFollow: false,
-      },
-      imgPost: imgPost9,
-      title: "산책하는 댕댕이",
-      content: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries,",
-      createdAt: "2024-01-17",
-      tagList: [
-        "산책", "댕댕이", "신났네",
-      ],
-    },
-    {
-      id: 10,
-      user : {
-        imgProfile: imgProfile4,
-        name: 'user10',
-        isFollow: false,
-      },
-      imgPost: imgPost10,
-      title: "산책하는 댕댕이",
-      content: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries,",
-      createdAt: "2024-01-17",
-      tagList: [
-        "산책", "댕댕이", "신났네",
-      ],
-    },
-  ]
+  const [profile, setProfile] = useState(false);
+
+  const [authToken, setAuthToken] = useState("");
+
+  const [dogList, setDogList] = useState(false);
+  const [postList, setPostList] = useState(false);
+  const [scrapList, setScrapList] = useState(false);
   
-  return (
-    <ScrollView style={styles.profileContainer}>
-      <View style={styles.profileTopView}>
-        <View style={styles.profileTopViewTopView}>
-          <Image 
-            style={styles.profileTopViewTopView}
-            source={imgPost1}
-          />
+  const [isEdit, setIsEdit] = useState(false);
+
+  const [backgroundImgUrl, setBackgroundImgUrl] = useState("");
+  const [profileImgUrl, setProfileImgUrl] = useState("");
+  const [nickname, setNickname] = useState(profile.nickname);
+  const [description, setDescription] = useState(profile.description);
+
+  const iconList = [iconDog, iconPost, iconScrap];
+
+  const [activeTab, setActiveTab] = useState(0);
+
+  const scrollViewRef = useRef(null);
+
+  const [isCreateDogModalOpen, setIsCreateDogModalOpen] = useState(false);
+
+  const openCreateDogModal = () => { setIsCreateDogModalOpen(true) }; 
+  const closeCreateDogModal = () => { setIsCreateDogModalOpen(false) }; 
+
+  const getMyProfile = async () => {
+    if (!authToken) {
+      setAuthToken(await AsyncStorage.getItem("accessToken"));
+    };
+
+
+    await axios.get(
+      `${apiUrl}/users/mypage`,
+      {headers: {
+        "Authorization": authToken ,
+      }}
+    ).then((res) => {
+      setProfile(res.data);
+      console.log(res.data);
+    }) .catch((err) => {
+      console.log(err);
+    })
+  }
+
+  const getMyDogList = async () => {
+    if (!authToken) {
+      setAuthToken(await AsyncStorage.getItem("accessToken"));
+    };
+
+    await axios.get(
+      `${apiUrl}/userpages/${profile.id}/dog`,
+      {headers: {
+        "Authorization": authToken ,
+      }}
+    ).then((res) => {
+      setDogList(res.data);
+    }).catch((err) => {
+      console.log(err);
+    })
+  }
+
+  const getMyPostList = async () => {
+    if (!authToken) {
+      setAuthToken(await AsyncStorage.getItem("accessToken"));
+    };
+
+    await axios.get(
+      `${apiUrl}/userpages/${profile.id}/post`,
+      {headers: {
+        "Authorization": authToken ,
+      }}
+    ).then((res) => {
+      setPostList(res.data);
+    }) .catch((err) => {
+      console.log(err);
+    })
+  }
+
+  const getMyScrapList = async () => {
+    if (!authToken) {
+      setAuthToken(await AsyncStorage.getItem("accessToken"));
+    };
+
+    await axios.get(
+      `${apiUrl}/userpages/${profile.id}/scrap`,
+      {headers: {
+        "Authorization": authToken ,
+      }}
+    ).then((res) => {
+      setScrapList(res.data);
+    }) .catch((err) => {
+      console.log(err);
+    })
+  }
+
+  useEffect(() => { 
+    if (!authToken) {
+      setAuthToken(AsyncStorage.getItem("accessToken"));
+    };
+  }, []);
+  
+  useEffect(() => {
+    getMyProfile();
+  }, [authToken]);
+
+  useEffect(() => {
+    getMyDogList();
+    getMyPostList();
+    getMyScrapList();
+  }, [profile]);
+  
+  const resizeImage = async (imageUri) => {
+    try {
+        const resizedImage = await ImageManipulator.manipulateAsync(
+          imageUri, // 이미지 URI
+            [{ resize: { width: 400, height: 300 } }], // 조절 옵션 배열
+            { compress: 1, format: "jpeg" } // 압축 및 형식 설정
+        );
+
+        // 조절된 이미지 데이터를 얻습니다.
+        console.log('Resized image:', resizedImage.uri);
+        return resizedImage;
+    } catch (err) {
+        console.error('Failed to resize image:', err);
+    }
+  };
+
+  const changeBackgroundImg = async () => {
+    const response = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 3], //비율 변경 가능
+      quality: 1,
+    });
+
+    if (response.canceled) {
+      return null;
+    }
+
+    setBackgroundImgUrl(response.assets[0]);
+  };
+
+  const changeProfileImg = async () => {
+    const response = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 3], //비율 변경 가능
+      quality: 1,
+    });
+
+    if (response.canceled) {
+      return null;
+    }
+    setProfileImgUrl(response.assets[0]);
+  };
+  
+  const editBackgroundImage = async () => {
+    const resizedImageUrl = await resizeImage(backgroundImgUrl.uri);
+
+    const localUri = resizedImageUrl.uri;
+    const fileName = localUri.split('/').pop();
+    const match = /\.(\w+)$/.exec(fileName ?? '');
+    const type = match ? `image/${match[1]}` : `image`;
+    const formData = new FormData();
+    formData.append('backgroundImage', { uri: localUri, name: fileName, type});
+
+    console.log(formData);
+
+    await axios.put(
+      `${apiUrl}/users/background`,
+      formData,
+      {headers: {
+        "Authorization": authToken ,
+        "Content-Type": "multipart/form-data",
+      }}
+    ).then((res) => {
+      console.log("배경 이미지 변경 ========================");
+      console.log(res.status);
+    }).catch((err) => {
+      console.log("배경 이미지 변경 ========================");
+      console.log(err);
+    })
+  };
+
+  const editProfileImage = async () => {
+    const resizedImageUrl = await resizeImage(profileImgUrl.uri);
+
+    const localUri = resizedImageUrl.uri;
+    const fileName = localUri.split('/').pop();
+    const match = /\.(\w+)$/.exec(fileName ?? '');
+    const type = match ? `image/${match[1]}` : `image`;
+
+    const formData = new FormData();
+    formData.append('profileImage', { uri: localUri, name: fileName, type});
+
+
+    await axios.put(
+      `${apiUrl}/users/profile-image`,
+      formData,
+      {headers: {
+        "Authorization": authToken ,
+        "Content-Type": "multipart/form-data",
+      }}
+    ).then((res) => {
+      console.log("프로필 이미지 변경==================");
+      console.log(res.status);
+    }).catch((err) => {
+      console.log("프로필 이미지 변경==================");
+      console.log(err);
+    })
+  };
+
+  const editProfileData = async () => {
+    const payLoad = {
+      newNickname: nickname,
+      description: description,
+    };
+
+    await axios.put(
+      `${apiUrl}/users`,
+      payLoad,
+      {headers: {
+        "Authorization": authToken ,
+        "Content-Type": "application/json",
+      }}
+    ).then((res) => {
+      console.log("프로필 데이터 변경==================");
+      console.log(res.status);
+    }).catch((err) => {
+      console.log("프로필 데이터 변경==================");
+      console.log(err);
+    })
+  };
+
+  const editProfile = async () => {
+    if (profile.backgroundImgUrl != backgroundImgUrl.uri) {
+      await editBackgroundImage();
+    }
+
+    if (profile.profileImgUrl != profileImgUrl.uri) {
+      await editProfileImage();
+    }
+    
+    if (profile.nickname != nickname || profile.description != description) {
+      await editProfileData();
+    }
+    
+    if (profile.backgroundImgUrl != backgroundImgUrl ||
+        profile.profileImgUrl != profileImgUrl ||
+        profile.nickname != nickname ||
+        profile.description != description
+      ) {
+        await getMyProfile();
+      }
+    setIsEdit(false);
+  };
+
+  const myProfileImg = () => {
+    if (!profile.profileImgUrl) {
+      return (
+        <View style={styles.profileDefaultTopView}>
+          <View style={styles.profileDefaultImageView}>
+            {profileImgUrl && 
+              <Image 
+                style={{
+                  ...styles.profileDefaultImage, 
+                  opacity: 0.8,
+                }}
+                source={profileImgUrl}
+              /> 
+            }
+            {!profileImgUrl && 
+              <Image 
+                style={{
+                  ...styles.profileDefaultImage, 
+                  opacity: 0.8,
+                }}
+                source={imgDefaultProfile}
+              /> 
+            }
+            <TouchableOpacity 
+              style={styles.profileEditDefaultProfileImgButtonView}
+              onPress={changeProfileImg}
+            >
+              <AntDesign 
+                name="pluscircleo" 
+                size={60} 
+                color="black" 
+                style={styles.profileEditDefaultProfileImgButtonIcon}
+              />
+            </TouchableOpacity>
+            <TouchableOpacity 
+              style={styles.profileEditDefaultButtonView}
+              onPress={editProfile}
+            >
+              <AntDesign 
+                name="checksquareo" 
+                size={33} 
+                color="rgb(13, 110, 253)" 
+                style={styles.profileEditButtonIcon}
+              />
+            </TouchableOpacity>
+          </View>  
         </View>
+      );
+    } else {
+      return (
         <View style={styles.profileTopViewMiddleView}>
-          <Image 
-            style={styles.profileTopViewMiddleViewImage}
-            source={imgProfile1}
-          />
+          <View style={styles.profileImageView}>
+            {profileImgUrl && 
+              <Image 
+                style={{
+                  ...styles.profileImage, 
+                  opacity: 0.8,
+                }}
+                src={profileImgUrl}
+              />
+            }
+            {!profileImgUrl && 
+              <Image 
+                style={{
+                  ...styles.profileImage, 
+                  opacity: 0.8,
+                }}
+                src={profile.profileImgUrl}
+              />
+            }
+            <TouchableOpacity 
+              style={styles.profileEditProfileImgButtonView}
+              onPress={changeProfileImg}
+            >
+              <AntDesign 
+                name="pluscircleo" 
+                size={60} 
+                color="black" 
+                style={styles.profileEditProfileImgButtonIcon}
+              />
+            </TouchableOpacity>
+            <TouchableOpacity 
+              style={styles.profileEditButtonView}
+              onPress={editProfile}
+            >
+              <AntDesign 
+                name="checksquareo" 
+                size={33} 
+                color="rgb(13, 110, 253)" 
+                style={styles.profileEditButtonIcon}
+              />
+            </TouchableOpacity>
+          </View>
         </View>
-        <View style={styles.profileTopViewBottomView}>
-          <View style={styles.profileTopViewBottomViewTopView}>
-            <Text style={styles.profileTopViewBottomViewName}>{ userProfile.name }</Text>
-            <View style={styles.profileTopViewBottomViewButtonView}>
-              <FollowButton />
-              <DirectMessageButton />
+      );
+    };
+  };
+
+  const myProfile = () => {
+    if (isEdit) {
+      return (
+        <View style={styles.profileTopView}>
+          <View style={styles.profileTopViewTopView}>
+            {backgroundImgUrl && 
+              <Image 
+                style={{
+                  ...styles.profileTopViewTopView, 
+                  opacity:0.6, 
+                  backgroundColor: "rgb(249, 250, 208)"
+                }}
+                source={
+                  backgroundImgUrl 
+                }
+              />
+            }
+            {!backgroundImgUrl && 
+              <Image 
+                style={{
+                  ...styles.profileTopViewTopView, 
+                  opacity:0.6, 
+                  backgroundColor: "rgb(249, 250, 208)"
+                }}
+                src={
+                  profile.backgroundImgUrl
+                }
+              />
+            }
+            <TouchableOpacity 
+              style={styles.profileEditBackgroundImgButtonView}
+              onPress={changeBackgroundImg}
+            >
+              <AntDesign 
+                name="pluscircleo" 
+                size={80}
+                color="black" 
+                style={styles.profileEditBackgroundImgButtonIcon}
+                />
+            </TouchableOpacity>
+          </View>
+          {myProfileImg()}
+          <View style={styles.profileTopViewBottomView}>
+            <View style={styles.profileTopViewBottomViewTopView}>
+              <View style={styles.profileEditTopView}></View>
+              <TextInput 
+                placeholder={profile.nickname}
+                style={styles.profileEditUsername}
+                value={nickname}
+                onChangeText={(e) => setNickname(e)}
+              />
+              <View style={styles.profileTopViewBottomViewButtonView}>
+                {/* <FollowButton authToken={authToken} isFollowed={profile.isFollowed} userId={profile.userId} /> */}
+                {/* <DirectMessageButton /> */}
+              </View>
+            </View>
+            <View style={styles.profileTopViewBottomViewBottomView}>
+              <Text style={styles.textFollow}>팔로워 {profile.followerCount}</Text>
+              <Text style={{...styles.textFollow, marginLeft:SCREEN_HEIGHT * 0.02}}>팔로잉 {profile.followingCount}</Text>
+            </View>
+            <TextInput 
+              placeholder={profile.description}
+              value={description}
+              style={{...styles.textDescription, height: SCREEN_HEIGHT * 0.04, paddingBottom: SCREEN_HEIGHT * 0.005, backgroundColor: "white"}}
+              multiline
+              onChangeText={(e) => setDescription(e)}
+            />
+          </View>
+        </View>
+      );
+    } else {
+      return (
+        <View style={styles.profileTopView}>
+          <View style={styles.profileTopViewTopView}>
+            <Image 
+              style={styles.profileTopViewTopView}
+              src={profile.backgroundImgUrl}
+            />
+          </View>
+          <View style={styles.profileTopViewMiddleView}>
+            <View style={styles.profileImageView}>
+              <Image 
+                style={styles.profileImage}
+                src={profile.profileImgUrl}
+              />
+              <TouchableOpacity 
+                style={styles.profileEditButtonView}
+                onPress={() => setIsEdit(true)}
+              >
+                <Image 
+                  style={styles.profileEditButtonIcon}
+                  source={iconEdit}
+                />
+              </TouchableOpacity>
             </View>
           </View>
-          <View style={styles.profileTopViewBottomViewBottomView}>
-            <Text style={styles.textFollow}>팔로워 {userProfile.follower}</Text>
-            <Text style={{...styles.textFollow, marginLeft:SCREEN_HEIGHT * 0.02}}>팔로잉 {userProfile.following}</Text>
+          <View style={styles.profileTopViewBottomView}>
+            <View style={styles.profileTopViewBottomViewTopView}>
+              <Text style={styles.profileTopViewBottomViewName}>{ profile.nickname }</Text>
+              <View style={styles.profileTopViewBottomViewButtonView}>
+                {/* <FollowButton /> */}
+                {/* <DirectMessageButton /> */}
+              </View>
+            </View>
+            <View style={styles.profileTopViewBottomViewBottomView}>
+              <Text style={styles.textFollow}>팔로워 {profile.followerCount}</Text>
+              <Text style={{...styles.textFollow, marginLeft:SCREEN_HEIGHT * 0.02}}>팔로잉 {profile.followingCount}</Text>
+            </View>
+            <Text style={styles.textDescription}>{profile.description}</Text>
           </View>
-          <Text style={styles.textDescription}>{userProfile.description}</Text>
         </View>
+      );
+    };
+  };
+  
+  const handleTabPress = async (index) => {
+    setActiveTab(index);
+    scrollViewRef.current.scrollTo({ x: SCREEN_WIDTH * index, animated: true });
+  };
+
+  const tabView = () => {
+    return (
+      <View style={styles.profileMiddleView}>
+        {iconList.map((icon, index) => (
+          <TouchableOpacity
+            key={index}
+            style={[
+              styles.tabButton,
+              activeTab === index && styles.activeTabButton,
+              index != 2 && {borderRightWidth: 1, borderRightColor: "gray"},
+            ]}
+            onPress={() => handleTabPress(index)}>
+            <Image
+              style={styles.profileTabBarIcon}
+              source={icon}
+            />
+          </TouchableOpacity>
+        ))}
       </View>
-      <View style={styles.profileBottomView}>
-        <Tab.Navigator
-          initialRouteName="Dog"
-          screenOptions={{
-            tabBarShowLabel: false,
-            tabBarStyle: {
-              height: SCREEN_HEIGHT * 0.06,
-            },
-            tabBarItemStyle: {
-              height: SCREEN_HEIGHT * 0.06,
-            },
-          }}
+    );
+  };
+
+  const profileDog = () => {
+    if (dogList) {
+      return (
+        <View style={styles.profileBottomView}>
+          <ProfileDog dogList={dogList} />
+        </View>
+      );
+    } else {
+      return (
+        <View style={styles.indicatorView}>
+          <ActivityIndicator 
+            size={100}
+          />
+        </View>
+      );
+    }
+  };
+
+  const profilePost = () => {
+    if (postList) {
+      return (
+        <View style={styles.profileBottomView}>
+          <ProfilePost  postList={postList} />
+        </View>
+      );
+    } else {
+      return (
+        <View style={styles.indicatorView}>
+          <ActivityIndicator 
+            size={100}
+          />
+        </View>
+      );
+    }
+  };
+
+  const profileScrap = () => {
+    if (scrapList) {
+      return (
+        <View style={styles.profileBottomView}>
+          <ProfileScrap  scrapList={scrapList} />
+        </View>
+      );
+    } else {
+      return (
+        <View style={styles.indicatorView}>
+          <ActivityIndicator 
+            size={100}
+          />
+        </View>
+      );
+    }
+  };
+
+  const contentView = () => {
+    if (activeTab === 0) {
+      return (
+        <View style={styles.tabView}>
+          {profileDog()}
+        </View>
+      );
+    } else if (activeTab === 1) {
+      return (
+        <View style={styles.tabView}>
+          {profilePost()}
+        </View>
+      );
+    } else if (activeTab === 2) {
+      return (
+        <View style={styles.tabView}>
+          {profileScrap()}
+        </View>
+      );
+    }
+  };
+
+  // const deleteDog = () => {
+  //   axios.delete(
+  //     `${apiUrl}/dogs/1`,
+  //     {headers: {
+  //       "Authorization": authToken ,
+  //       "Content-Type": "application/json",
+  //     }}
+  //   ).then((res) => {
+  //     console.log("강아지 삭제==================");
+  //     console.log(res.status);
+  //   }).catch((err) => {
+  //     console.log("프로필 데이터 변경==================");
+  //     console.log(err);
+  //   })
+  // }
+
+  return (
+    <View style={styles.profileContainer}>
+      <ScrollView style={styles.profileScrollView}>
+        {myProfile()}
+
+        {tabView()}
+
+        <ScrollView
+          horizontal
+          pagingEnabled
+          showsHorizontalScrollIndicator={false}
+          ref={scrollViewRef}
         >
-          <Tab.Screen 
-            name="Dog" 
-            children={() => <ProfileDog dogList={userProfile.dogs} />}
-            options={{
-              tabBarIcon: () => (
-                <Image
-                  style={styles.profileTabBarIcon}
-                  source={iconDog}
-                />
-              ),
-            }}
+          {contentView()}
+        </ScrollView>
+      </ScrollView>
+      { activeTab === 0 &&
+        <TouchableOpacity 
+          onPress={() => openCreateDogModal()}
+          style={styles.createDogView}
+        >
+          <Image 
+            style={styles.createDogImage}
+            source={iconCreate}
           />
-          <Tab.Screen 
-            name="Post" 
-            children={() => <ProfilePost postList={postList} />} 
-            options={{
-              tabBarIcon: () => (
-                <Image
-                  style={styles.profileTabBarIcon}
-                  source={iconPost}
-                />
-              ),
-            }}
-          />
-          <Tab.Screen 
-            name="Scrap" 
-            children={() => <ProfileScrap postList={postList} />} 
-            options={{
-              tabBarIcon: () => (
-                <Image
-                  style={styles.profileTabBarIcon}
-                  source={iconScrap}
-                />
-              ),
-            }}
-          />
-        </Tab.Navigator>
-      </View>
-    </ScrollView>
+        </TouchableOpacity>
+      }
+      <Modal
+        animationType="fade"
+        transparent={true}
+        visible={isCreateDogModalOpen}
+        onRequestClose={() => closeCreateDogModal()}>
+        <CreateDog getMyDogList={getMyDogList} closeCreateDogModal={closeCreateDogModal} />
+      </Modal>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
   profileContainer: {
     width: SCREEN_WIDTH,
-    flex: 1,
-    height: SCREEN_HEIGHT * 0.82,
+    // backgroundColor: "rgb(206, 207, 184)",
+    position: "relative",
+  },
+  profileScrollView: {
+    width: SCREEN_WIDTH,
   },
   profileTopView: {
     width: SCREEN_WIDTH,
@@ -318,35 +685,95 @@ const styles = StyleSheet.create({
   },
   profileBottomView: {
     width: SCREEN_WIDTH,
-    height: SCREEN_HEIGHT * 2,
   },
   profileTabBarIcon: {
-    width: SCREEN_HEIGHT * 0.04,
-    height: SCREEN_HEIGHT * 0.04,
-    marginTop: -5,
-    marginLeft: -5,
+    width: SCREEN_HEIGHT * 0.05,
+    height: SCREEN_HEIGHT * 0.05,
   },
   profileTopViewTopView: {
+    width: SCREEN_WIDTH,
+    height: SCREEN_HEIGHT * 0.2,
+    position: "relative",
+    borderBottomWidth: 1,
+    borderColor: "gainsboro",
+  },
+  profileTopViewTopImage: {
     width: SCREEN_WIDTH,
     height: SCREEN_HEIGHT * 0.2,
   },
   profileTopViewMiddleView: {
     position: "absolute",
     borderRadius: 100,
-    width: 100,
-    height: 100,
-    top: SCREEN_HEIGHT * 0.133,
+    width: SCREEN_WIDTH * 0.26,
+    height: SCREEN_WIDTH * 0.26,
+    top: SCREEN_HEIGHT * 0.127,
     left: SCREEN_WIDTH * 0.07,
   },
-  profileTopViewMiddleViewImage: {
+  profileImageView: {
     borderRadius: 100,
-    width: 100,
-    height: 100,
+    width: SCREEN_WIDTH * 0.26,
+    height: SCREEN_WIDTH * 0.26,
+    position: "relative",
   },
+  profileDefaultTopView: {
+    position: "absolute",
+    borderRadius: 100,
+    width: SCREEN_WIDTH * 0.26,
+    height: SCREEN_WIDTH * 0.26,
+    top: SCREEN_HEIGHT * 0.14,
+    left: SCREEN_WIDTH * 0.09,
+  },
+  profileEditDefaultProfileImgButtonView: {
+    position: "absolute",
+    left: SCREEN_WIDTH * 0.043,
+    top: SCREEN_WIDTH * 0.043,
+  },
+  profileDefaultImageView: {
+    borderRadius: 100,
+    width: SCREEN_WIDTH * 0.26,
+    height: SCREEN_WIDTH * 0.26,
+    position: "relative",
+  },
+  profileDefaultImage: {
+    borderRadius: 100,
+    width: SCREEN_WIDTH * 0.23,
+    height: SCREEN_WIDTH * 0.23,
+    borderWidth: 1,
+    borderColor: "gray",
+  },
+  profileImage: {
+    borderRadius: 100,
+    width: SCREEN_WIDTH * 0.26,
+    height: SCREEN_WIDTH * 0.26,
+    borderWidth: 1,
+    borderColor: "lightgrey",
+  },
+  
+  profileEditDefaultButtonView: {
+    position: "absolute",
+    bottom: 0,
+    right: 0,
+    width: SCREEN_WIDTH * 0.09,
+    height: SCREEN_WIDTH * 0.09,
+  },
+  profileEditButtonView: {
+    position: "absolute",
+    bottom: -5,
+    right: -10,
+    width: SCREEN_WIDTH * 0.09,
+    height: SCREEN_WIDTH * 0.09,
+  },
+  profileEditButtonIcon: {
+    width: SCREEN_WIDTH * 0.09,
+    height: SCREEN_WIDTH * 0.09,
+  },
+
   profileTopViewBottomView: {
     width: SCREEN_WIDTH,
     height: SCREEN_HEIGHT * 0.15,
     paddingHorizontal: SCREEN_HEIGHT * 0.02,
+    backgroundColor: "white",
+    zIndex: -1,
   },
   profileTopViewBottomViewTopView: {
     marginVertical: SCREEN_HEIGHT * 0.01,
@@ -362,9 +789,9 @@ const styles = StyleSheet.create({
   profileTopViewBottomViewButtonView: {
     flexDirection: "row",
     width: SCREEN_WIDTH * 0.235,
-    justifyContent: "space-between",
+    // justifyContent: "space-between",
     position: "absolute",
-    right: SCREEN_WIDTH * 0.01,
+    right: SCREEN_WIDTH * 0.00,
     top: SCREEN_HEIGHT * 0.014,
   },
   profileTopViewBottomViewBottomView: {
@@ -380,4 +807,85 @@ const styles = StyleSheet.create({
   textDescription: {
     fontSize: 14,
   },
+
+  profileEditBackgroundImgButtonView: {
+    position: "absolute",
+    left: SCREEN_WIDTH * 0.41,
+    top: SCREEN_HEIGHT * 0.06,
+  },
+  profileEditBackgroundImgButtonIcon: {
+    opacity: 0.6,
+  },
+  profileEditProfileImgButtonView: {
+    position: "absolute",
+    left: SCREEN_WIDTH * 0.058,
+    top: SCREEN_WIDTH * 0.058,
+  },
+  profileEditDefaultProfileImgButtonIcon: {
+    opacity: 0.8,
+  },
+  profileEditProfileImgButtonIcon: {
+    opacity: 0.5,
+  },
+  profileEditTopView: {
+    width: SCREEN_WIDTH * 0.3,
+    height: SCREEN_HEIGHT * 0.04,
+  },
+  profileEditUsername: {
+    position: "absolute",
+    backgroundColor: "white",
+    fontSize: 20,
+    fontWeight: "600",
+    width: SCREEN_WIDTH * 0.3,
+    height: SCREEN_HEIGHT * 0.04,
+    textAlign: "center",
+    borderColor: "gray",
+    borderWidth: 1,
+    borderRadius: 5,
+  },
+  
+  profileMiddleView: {
+    flexDirection: "row",
+    width: SCREEN_WIDTH,
+    height: SCREEN_HEIGHT * 0.063,
+    justifyContent: "space-between",
+    borderWidth: 1,
+    borderColor: "gainsboro",
+  },
+  tabButton: {
+    alignItems: "center",
+    justifyContent: "center",
+    width: SCREEN_WIDTH * 0.33,
+    height: SCREEN_HEIGHT * 0.06,
+    backgroundColor: "rgb(249, 250, 208)",
+  },
+  activeTabButton: {
+    backgroundColor: "rgb(235, 233, 152)",
+  },
+
+  tabView: {
+    width: SCREEN_WIDTH,
+  },
+
+  indicatorView: {
+    width: SCREEN_WIDTH,
+    height: SCREEN_HEIGHT * 0.3,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+
+  createDogView: {
+    width: SCREEN_WIDTH * 0.18,
+    height: SCREEN_WIDTH * 0.18,
+    position: "absolute",
+    bottom: SCREEN_WIDTH * 0.05,
+    right: SCREEN_WIDTH * 0.05,
+    elevation: 5,
+    borderRadius: 100,
+  },
+  createDogImage: {
+    width: SCREEN_WIDTH * 0.19,
+    height: SCREEN_WIDTH * 0.19,
+  },
+
 });

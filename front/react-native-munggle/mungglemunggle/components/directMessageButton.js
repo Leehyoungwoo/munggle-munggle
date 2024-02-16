@@ -21,8 +21,11 @@ const styles = StyleSheet.create({
     height: SCREEN_HEIGHT * 0.04,
     justifyContent: "center",
     alignItems: "center",
-    borderRadius: 8,
     backgroundColor: "rgb(253, 245, 169)",
+    borderTopRightRadius: 5,
+    borderBottomRightRadius: 5,
+    borderWidth: 1,
+    borderColor: "gainsboro",
   },
   iconDirectMessage: {
     width: SCREEN_HEIGHT * 0.028,

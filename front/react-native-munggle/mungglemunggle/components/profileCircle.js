@@ -1,19 +1,18 @@
 import React from "react";
-import { View, Text, StyleSheet, Image } from "react-native";
+import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
 
 export default function ProfileCircle (props) {
   return (
     <View style={styles.profileCircleContainer}>
-      <View style={styles.profileCircleImageView}>
+      <TouchableOpacity style={styles.profileCircleImageView}>
         <Image 
           style={styles.profileCircleImage}
-          source={props.imageProfile}
+          src={props.imageProfile}
         />
-      </View>
-
-      <View style={styles.profileCircleNameView}>
-        <Text style={styles.profileCircleName}>{ props.nameProfile }</Text>
-      </View>
+        <View style={styles.profileCircleNameView}>
+          <Text style={styles.profileCircleName}>{ props.nameProfile }</Text>
+        </View>
+      </TouchableOpacity>
     </View>
   );
 }
@@ -39,9 +38,10 @@ const styles = StyleSheet.create ({
     width: 90,
     justifyContent: "center",
     alignItems: "center",
+    marginTop: 5,
   },
   profileCircleName: {
-    fontSize: 18,
+    fontSize: 15,
     fontWeight: "500",
   },
 }); 

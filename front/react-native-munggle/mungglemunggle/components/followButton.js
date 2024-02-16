@@ -1,12 +1,70 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { TouchableOpacity, Text, StyleSheet, Dimensions } from "react-native";
+
+import axios from "axios";
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get("window")
 
-export default function FollowButton () {
+export default function FollowButton (props) {  
+  const [isFollowed, setIsFollowed] = useState(props.isFollowed);
+
+  const apiUrl = "http://i10a410.p.ssafy.io:8080";
+  
+  const getIsFollowed = async () => {
+    await axios.get(
+      `${apiUrl}/follows/follow-check/${props.userId}`,
+      {headers: {
+        "Authorization": props.authToken ,
+      }}
+    ).then(async (res) => {
+      console.log(res.data);
+      setIsFollowed(res.data);
+      await changeIsFollowed(res.data);
+    }).catch((err) => {
+      console.log(err);
+    })
+  };
+
+  const changeIsFollowed = async (isFollow) => {
+    if (!isFollow) {
+      await axios.post(
+        `${apiUrl}/follows/${props.userId}`,
+        {headers: {
+          "Authorization": props.authToken ,
+        }}
+      ).then((res) => {
+        console.log("팔로우");
+        console.log(res.status);
+        setIsFollowed(!isFollow);
+      }).catch((err) => {
+        console.log(err);
+      })
+    } else {
+      await axios.delete(
+        `${apiUrl}/follows/${props.userId}`,
+        {headers: {
+          "Authorization": props.authToken ,
+        }}
+      ).then((res) => {
+        console.log("언팔로우");
+        console.log(res.status);
+        setIsFollowed(!isFollow);
+      }).catch((err) => {
+        console.log(err);
+      })
+    }
+  }
+
+  const handleFollow = async () => {   
+    await getIsFollowed();
+  };
+  
   return (
-    <TouchableOpacity style={styles.followButtonView}>
-      <Text style={styles.followButtonText}>팔로우</Text>
+    <TouchableOpacity 
+      style={styles.followButtonView}
+      onPress={() => handleFollow()}
+    >
+      <Text style={styles.followButtonText}>{!isFollowed ? "팔로우" : "팔로잉" }</Text>
     </TouchableOpacity>
   );
 }
@@ -18,10 +76,13 @@ const styles = StyleSheet.create({
     backgroundColor: "rgb(253, 245, 169)",
     justifyContent: "center",
     alignItems: "center",
-    borderRadius: 8,
+    borderTopLeftRadius: 5,
+    borderBottomLeftRadius: 5,
+    borderWidth: 1,
+    borderColor: "gainsboro",
   },
   followButtonText: {
     fontSize: 15,
-    fontWeight: "500",
+    fontWeight: "600",
   },
 });

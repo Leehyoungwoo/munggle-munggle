@@ -1,8 +1,8 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Dimensions, Image, StyleSheet } from "react-native";
 
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { NavigationContainer } from '@react-navigation/native';
+import { NavigationContainer, useNavigation } from '@react-navigation/native';
 
 import PostScreen from "../pages/post";
 import MatchScreen from "../pages/match";
@@ -17,7 +17,22 @@ import iconProfile from "../../assets/icons/profile.png";
 const Tab = createBottomTabNavigator();
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get("window")
 
-export default function Body (navigation) {
+
+const TabBarIcon = ({ image }) => {
+  const navigation = useNavigation();
+
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('state', (e) => {
+      console.log("Current Screen:", e.data.state.routes[e.data.state.index].name);
+    });
+
+    return unsubscribe;
+  }, [navigation]);
+
+  return <Image style={styles.tabBarIcon} source={image} />;
+};
+
+export default function Body () {
   return (
     <NavigationContainer style={{flex: 1,}}>
       <Tab.Navigator
@@ -42,12 +57,7 @@ export default function Body (navigation) {
         style={{flex: 1,}}
         component={PostScreen}
         options={{
-          tabBarIcon: () => (
-            <Image
-              style={styles.tabBarIcon}
-              source={iconPost}
-            />
-          ),
+          tabBarIcon: () => <TabBarIcon image={iconPost} />,
         }}
       />
       <Tab.Screen
@@ -55,12 +65,7 @@ export default function Body (navigation) {
         style={{flex: 1,}}
         component={WalkScreen}
         options={{
-          tabBarIcon: () => (
-            <Image
-              style={styles.tabBarIcon}
-              source={iconWalk}
-            />
-          ),
+          tabBarIcon: () => <TabBarIcon image={iconWalk} />,
         }}
       />
       <Tab.Screen
@@ -68,12 +73,7 @@ export default function Body (navigation) {
         style={{flex: 1,}}
         component={MatchScreen}
         options={{
-          tabBarIcon: () => (
-            <Image
-              style={styles.tabBarIcon}
-              source={iconMatch}
-            />
-          ),
+          tabBarIcon: () => <TabBarIcon image={iconMatch} />,
         }}
       />
       <Tab.Screen
@@ -81,12 +81,7 @@ export default function Body (navigation) {
         style={{flex: 1,}}
         component={ProfileScreen}
         options={{
-          tabBarIcon: () => (
-            <Image
-              style={styles.tabBarIcon}
-              source={iconProfile}
-            />
-          ),
+          tabBarIcon: () => <TabBarIcon image={iconProfile} />,
         }}
       />
     </Tab.Navigator>
