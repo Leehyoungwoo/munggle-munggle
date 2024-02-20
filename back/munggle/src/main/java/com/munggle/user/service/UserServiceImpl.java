@@ -154,8 +154,6 @@ public class UserServiceImpl implements UserService {
         String title = "멍글멍글 이메일 인증 번호";
         String authCode = this.createCode();
         emailService.sendEmail(toEmail, title, authCode);
-        // 이메일 인증 요청 시 인증 번호 Redis에 저장 ( key = "AuthCode " + Email / value = AuthCode )
-        // 임시 구현으로 테이블로 구현
         EmailVerification emailVerification = EmailVerification.builder()
                 .email(toEmail)
                 .verificationCode(authCode)
