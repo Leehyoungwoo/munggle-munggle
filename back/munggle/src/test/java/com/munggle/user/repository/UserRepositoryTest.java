@@ -16,6 +16,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
 import java.util.List;
@@ -51,6 +52,7 @@ class UserRepositoryTest {
 
     @Test
     @DisplayName("pk로 회원 찾기")
+    @Transactional
     void findByIdAndIsEnabledTrue() {
         // given
         userRepository.save(user);
@@ -65,6 +67,7 @@ class UserRepositoryTest {
 
     @Test
     @DisplayName("유저네임으로 회원 찾기")
+    @Transactional
     void findByUsernameAndIsEnabledTrue() {
         // given
         userRepository.save(user);
@@ -79,6 +82,7 @@ class UserRepositoryTest {
 
     @Test
     @DisplayName("키워드를 포함하는 닉네임을 가진 회원들 찾기")
+    @Transactional
     void findByNicknameContainingAndIsEnabledTrue() {
         // given
         userRepository.save(user);
@@ -94,6 +98,7 @@ class UserRepositoryTest {
 
     @Test
     @DisplayName("닉네임으로 회원 찾기")
+    @Transactional
     void findByNicknameAndIsEnabledTrue() {
         // given
         userRepository.save(user);
@@ -111,6 +116,7 @@ class UserRepositoryTest {
     @ParameterizedTest
     @ValueSource(longs = {1L})
     @DisplayName("팔로워가 많은 순으로 회원 가져오기")
+    @Transactional
     void findAllAndNotMeOrderByFollowIncreaseCountDesc(Long userId) {
         // given
         User user1 = createUser("user1@test.com", "11111111", "user1", 3);  // 예시 사용자 생성
@@ -133,6 +139,7 @@ class UserRepositoryTest {
     @ParameterizedTest
     @ValueSource(longs = {1L})
     @DisplayName("팔로우가 아닌 타 회원 팔로우 수로 조회")
+    @Transactional
     void findAllAndNotMeNotFollowOrderByFollowIncreaseCountDesc(Long userId) {
         // given
         User user1 = createUser("user1@test.com", "11111111", "user1", 3);  // 예시 사용자 생성
