@@ -1,9 +1,6 @@
 package com.munggle.user.service;
 
-import com.munggle.domain.exception.DuplicateNickNameException;
-import com.munggle.domain.exception.EmailVerificationFailException;
-import com.munggle.domain.exception.PasswordNotConfirmException;
-import com.munggle.domain.exception.UserNotFoundException;
+import com.munggle.domain.exception.*;
 import com.munggle.domain.model.entity.User;
 import com.munggle.domain.model.entity.UserImage;
 import com.munggle.follow.repository.FollowRepository;
@@ -23,17 +20,13 @@ import com.munggle.user.repository.UserImageRepository;
 import com.munggle.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.oauth2.client.oidc.userinfo.OidcUserRequest;
-import org.springframework.security.oauth2.client.oidc.userinfo.OidcUserService;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
-import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -54,11 +47,7 @@ import static com.munggle.domain.exception.ExceptionMessage.*;
 @Transactional(readOnly = true)
 public class UserServiceImpl implements UserService {
 
-    private String email;
-    private DefaultOAuth2UserService defaultOAuth2UserService = new DefaultOAuth2UserService();
-
-    @Value("${spring.mail.auth-code-expiration-millis}")
-    private long authCodeExpirationMillis;
+    private final DefaultOAuth2UserService defaultOAuth2UserService = new DefaultOAuth2UserService();
     private final EmailService emailService;
     private final UserRepository userRepository;
     private final UserImageRepository userImageRepository;
@@ -88,19 +77,24 @@ public class UserServiceImpl implements UserService {
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
         OAuth2User oauth2User = defaultOAuth2UserService.loadUser(userRequest);
+        String registrationId = userRequest.getClientRegistration().getRegistrationId();
+        String email = switch (registrationId) {
+            case "naver" -> {
+                @SuppressWarnings("unchecked")
+                Map<String, Object> response = (Map<String, Object>) oauth2User.getAttributes().get("response");
+                email = (String) response.get("email");
+                yield email;
+            }
+            case "kakao" -> {
+                @SuppressWarnings("unchecked")
+                Map<String, Object> response = (Map<String, Object>) oauth2User.getAttributes().get("kakao_account");
+                email = (String) response.get("email");
+                yield email;
+            }
+            default -> throw new IllegalEmailDomainException(ILLEGEL_EMAIL_DOMAIN);
+        };
 
-        if (userRequest.getClientRegistration().getRegistrationId().equals("naver")) {
-            Map<String, Object> response = (Map<String, Object>) oauth2User.getAttributes().get("response");
-            email = (String) response.get("email");
-        }
-
-        if (userRequest.getClientRegistration().getRegistrationId().equals("kakao")) {
-            Map<String, Object> kakaoAccount = (Map<String, Object>) oauth2User.getAttributes().get("kakao_account");
-            email = (String) kakaoAccount.get("email");
-        }
-        User user = (User) this.loadUserByUsername(email);
-
-        return user;
+        return (User) this.loadUserByUsername(email);
     }
 
 

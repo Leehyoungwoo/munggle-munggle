@@ -18,8 +18,7 @@ public class OidcUserServiceImpl implements OidUserService{
     @Override
     public OidcUser loadUser(OidcUserRequest userRequest) throws OAuth2AuthenticationException {
         String email = userRequest.getIdToken().getEmail();
-        User user = (User) userService.loadUserByUsername(email);
 
-        return user;
+        return (User) userService.loadUserByUsername(email);
     }
 }
