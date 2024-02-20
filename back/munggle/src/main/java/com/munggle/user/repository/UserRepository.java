@@ -20,7 +20,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     List<User> findByNicknameContainingAndIsEnabledTrue(String keyword);
 
-    Optional<Object> findByNicknameAndIsEnabledTrue(String nickname);
+    Optional<User> findByNicknameAndIsEnabledTrue(String nickname);
 
     @Query("select u from User u where u.isEnabled = true and u.id <> :userId order by u.followIncreaseCount DESC")
     List<User> findAllAndNotMeOrderByFollowIncreaseCountDesc(@Param("userId") Long userId, Pageable pageable);
