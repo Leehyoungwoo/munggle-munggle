@@ -97,7 +97,6 @@ public class UserServiceImpl implements UserService {
         return (User) this.loadUserByUsername(email);
     }
 
-
     @Override
     public UserMyPageDto getUserMypage(Long id) {
         User user = findMemberById(id);
