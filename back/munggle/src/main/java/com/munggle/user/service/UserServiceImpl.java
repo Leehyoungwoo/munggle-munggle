@@ -103,17 +103,20 @@ public class UserServiceImpl implements UserService {
         User user = findMemberById(id);
         Integer followerCount = followService.getFollowerCount(id);
         Integer followingCount = followService.getFollowingCount(id);
+
         return UserMapper.toUserMyPageDto(user, followerCount, followingCount);
     }
 
     public UserProfileDto getUserProfile(Long id) {
         User user = findMemberById(id);
+
         return UserMapper.toUserProfileDto(user);
     }
 
     @Override
     public List<UserListDto> getSearchPage(String keyword) {
         List<User> userList = userRepository.findByNicknameContainingAndIsEnabledTrue(keyword);
+
         return UserMapper.fromUsers(userList);
     }
 
@@ -299,7 +302,6 @@ public class UserServiceImpl implements UserService {
     public List<UserProfileDto> recommendUserList(Long userId){
 
         List<Long> followIdList = followRepository.findByFollowFromIdAndIsFollowedTrue(userId).stream().map(user -> user.getFollowTo().getId()).collect(Collectors.toList());
-
         List<User> list = new ArrayList<>();
 
         // 상위 20명만 리턴
