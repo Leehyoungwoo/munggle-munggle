@@ -296,7 +296,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<UserProfileDto> recommendUserList(Long userId){
+    public List<UserProfileDto> recommendUserList(Long userId) {
 
         List<Long> followIdList = followRepository.findByFollowFromIdAndIsFollowedTrue(userId).stream().map(user -> user.getFollowTo().getId()).collect(Collectors.toList());
 
@@ -306,19 +306,19 @@ public class UserServiceImpl implements UserService {
         int page = 0; // 첫 페이지
         int size = 20; // 페이지 당 결과 수
 
-        if(followIdList.isEmpty())
+        if (followIdList.isEmpty())
             list = userRepository.findAllAndNotMeOrderByFollowIncreaseCountDesc(userId, PageRequest.of(page, size));
         else
             list = userRepository.findAllAndNotMeNotFollowOrderByFollowIncreaseCountDesc(userId, followIdList, PageRequest.of(page, size));
         return list
-                .stream().map(user->UserMapper.toUserProfileDto(user)).collect(Collectors.toList());
+                .stream().map(user -> UserMapper.toUserProfileDto(user)).collect(Collectors.toList());
     }
 
     @Override
     @Transactional
     @Scheduled(cron = "* 59 23 * * *", zone = "Asia/Seoul")
-    public void resetFollowIncreaseCnt(){
-        List<User> userList = userRepository.findAll().stream().map(user-> {
+    public void resetFollowIncreaseCnt() {
+        List<User> userList = userRepository.findAll().stream().map(user -> {
             user.resetFollowIncreaseCount();
             return user;
         }).collect(Collectors.toList());
