@@ -29,7 +29,6 @@ import static com.munggle.domain.exception.ExceptionMessage.TOKEN_NOT_AVAILABLE;
 @RequiredArgsConstructor
 public class SocketHandler extends TextWebSocketHandler {
 
-    private final DMRoomService dmRoomService;
     private Map<String, WebSocketSession> sessions = new HashMap<>();
     private Map<String, Queue<TextMessage>> messages = new HashMap<>();
     private final ObjectMapper objectMapper;
@@ -106,7 +105,7 @@ public class SocketHandler extends TextWebSocketHandler {
     }
 
     private void sendQueuedMessagesToUser(Long userId, WebSocketSession session) throws JsonProcessingException {
-//         큐에 저장된 메시지를 사용자에게 전송하는 로직 구현
+        // 큐에 저장된 메시지를 사용자에게 전송하는 로직 구현
         String userIdStr = userId.toString();
         Queue<TextMessage> messageQueue = messages.get(userIdStr);
 

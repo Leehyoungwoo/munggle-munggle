@@ -36,8 +36,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         filterChain.doFilter(request, response);
     }
 
-    private void successfulRefreshAuthentication(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    private void successfulRefreshAuthentication(HttpServletRequest request,
+                                                 HttpServletResponse response) throws IOException {
         String refreshToken = jwtProvider.resolveToken(request);
+
         try {
             String newAccessToken = jwtProvider.refreshAccessToken(refreshToken);
             response.setHeader("Access-token", "Bearer " + newAccessToken);
