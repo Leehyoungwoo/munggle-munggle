@@ -42,18 +42,14 @@ public class SecurityConfig {
                         sessionManagement -> sessionManagement
                                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(requests -> requests
-                                .requestMatchers(
-                                        HttpMethod.POST, "/users",
-                                        "/users/emails/verification-requests",
-                                        "/users/emails/verifications"
-                                ).permitAll()
-                                .requestMatchers(HttpMethod.GET, "/users/nickname").hasAnyRole("ADMIN", "MEMBER")
-                                .requestMatchers(
-                                        "/users/**", "/userpages/**", "/alarms/**", "/blocks/**", "/comments/**",
-                                        "/dogs/**", "/dog-match/**", "/follows/**", "/posts/**", "/search/**",
-                                        "/walks/**", "/message/**"
-                                ).hasAnyRole("ADMIN", "MEMBER")
-                                .anyRequest().authenticated()
+                        .requestMatchers(
+                                HttpMethod.POST, "/users",
+                                "/users/emails/verification-requests",
+                                "/users/emails/verifications"
+                        ).permitAll()
+                        .requestMatchers("/**")
+                        .hasAnyRole("ADMIN", "MEMBER")
+                        .anyRequest().authenticated()
                 )
                 .formLogin(
                         configure -> configure.successHandler(new LoginAuthenticationSuccessHandler(jwtProvider))
