@@ -21,9 +21,9 @@ public class UserMapper {
 
     public static User toEntity(UserCreateDto userCreateDto) {
         return User.builder()
-                .username(userCreateDto.getUsername())
-                .password(userCreateDto.getPassword())
-                .nickname(userCreateDto.getNickname())
+                .username(userCreateDto.username())
+                .password(userCreateDto.password())
+                .nickname(userCreateDto.nickname())
                 .role(Role.MEMBER)
                 .isEnabled(true)
                 .build();

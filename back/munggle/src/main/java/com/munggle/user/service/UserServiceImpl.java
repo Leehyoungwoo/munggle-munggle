@@ -11,7 +11,6 @@ import com.munggle.user.dto.*;
 import com.munggle.email.service.EmailService;
 import com.munggle.emailverification.EmailVerification;
 import com.munggle.emailverification.EmailVerificationRepository;
-import com.munggle.user.dto.UserCreateDto;
 import com.munggle.user.dto.UserMyPageDto;
 import com.munggle.user.dto.UserProfileDto;
 import com.munggle.user.dto.UserListDto;
@@ -217,8 +216,8 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public void updateProfile(Long id, UpdateProfileDto updateProfileDto) {
         User user = this.findMemberById(id);
-        String newNickname = updateProfileDto.getNewNickname();
-        String newDesc = updateProfileDto.getDescription();
+        String newNickname = updateProfileDto.newNickname();
+        String newDesc = updateProfileDto.description();
         user.changeProfile(newNickname, newDesc);
     }
 
@@ -226,8 +225,8 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public void updatePassword(Long id, UpdatePasswordDto updatePasswordDto) {
         User user = findMemberById(id);
-        String newPassword = updatePasswordDto.getNewPassword();
-        String passwordConfirm = updatePasswordDto.getNewPasswordConfirmation();
+        String newPassword = updatePasswordDto.newPassword();
+        String passwordConfirm = updatePasswordDto.newPasswordConfirmation();
         // 비밀번호 확인과 일치하는지 확인
         if (!newPassword.equals(passwordConfirm)) {
             throw new PasswordNotConfirmException(PASSWORD_NOT_CONFIRM);

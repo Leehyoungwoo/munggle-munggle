@@ -4,27 +4,26 @@ import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
-@Getter
 @Builder
-@AllArgsConstructor
-public class UserMyPageDto {
+public record UserMyPageDto(
 
-    private final Long Id;
+        Long Id,
 
-    private final String backgroundImgUrl;
+        String backgroundImgUrl,
 
-    private final String profileImgUrl;
+        String profileImgUrl,
 
-    @NotNull
-    private final String username;
+        @NotNull
+        String username,
 
-    @NotNull
-    private final String nickname;
+        @NotNull
+        String nickname,
 
-    private final String description;
+        String description,
 
-    private final Integer followerCount;
+        Integer followerCount,
 
-    private final Integer followingCount;
+        Integer followingCount) {
 }

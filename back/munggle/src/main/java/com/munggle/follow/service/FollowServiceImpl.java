@@ -119,7 +119,6 @@ public class FollowServiceImpl implements FollowService {
     public Page<UserListDto> convertToUserListDtoPage(Page<User> userPage, Long myId) {
         return userPage.map(user -> {
             UserListDto userListDto = UserListDto.toUserListDto(user);
-            userListDto.setFollowing(checkIsFollowed(myId, user.getId()));
             return userListDto;
         });
     }
