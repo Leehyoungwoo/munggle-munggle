@@ -94,7 +94,6 @@ public class FollowServiceImpl implements FollowService {
     @Override
     @Transactional
     public void unfollow(Long fromUserId, Long targetUserId) {
-
         User targetUser = userRepository.findByIdAndIsEnabledTrue(targetUserId)
                 .orElseThrow(() -> new UserNotFoundException(USER_NOT_FOUND));
         targetUser.minusFollowIncreaseCount();
