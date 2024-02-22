@@ -1,11 +1,9 @@
 package com.munggle.user.controller;
 
 import com.munggle.domain.model.entity.User;
-import com.munggle.follow.service.FollowService;
 import com.munggle.user.dto.*;
 import com.munggle.user.service.UserService;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.Email;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
